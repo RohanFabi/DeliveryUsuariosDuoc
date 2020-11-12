@@ -1,0 +1,110 @@
+
+<!-- CONTENT -->
+        <div id="layoutDefault_content">
+            <main>
+                <nav class="navbar navbar-marketing navbar-expand-lg navbar-light" style="background-color:001B37 ;">
+                    <div class="container">
+                        <img class="img-fluid" src="img/logo-duoc-uc-universidad-catolica.jpg" alt="">
+
+                        <a class="navbar-brand text-dark" href="index">Sitio Delivery</a><button
+                            class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation"><i data-feather="menu"></i></button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav ml-auto mr-lg-5">
+                                <!-- INCIO -->
+                                <li class="nav-item"><a class="nav-link" href="index">Inicio Tienda </a></li>
+                                <li class="nav-item"><a class="nav-link" href="Administracion">Inicio Administracion </a></li>
+                                <li class="nav-item"><a class="nav-link" href="Producto">Producto </a></li>
+                                <li class="nav-item"><a class="nav-link" href="{%url 'Iniciooferta'%}">Oferta </a></li>
+                        
+                                <li class="nav-item dropdown no-caret  dropdown-user">
+                                    <a class=" dropdown-toggle" id="navbarDropdownUserImage" href="" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                                        <!-- Imagen usuaurio en nav -->
+                                        <div class="avatar avatar-online avatar-lg mr-1">
+                                            <img class="avatar-img img-fluid"
+                                                src="img/logosTiendas/logo-ACHOCLONADOS.png">
+                                        </div>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
+                                        aria-labelledby="navbarDropdownUserImage">
+                                        <!-- Datos usuario -->
+                                        <div class="dropdown-header d-flex align-items-center">
+                                            <img class="dropdown-user-img"
+                                                src="https://source.unsplash.com/QAB-WJcbgJk/60x60" />
+                                            <div class="dropdown-user-details">
+                                                <div class="dropdown-user-details-name">Valerie Luna</div>
+                                                <div class="dropdown-user-details-email">vluna@aol.com</div>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown-divider"></div>
+                                        <!-- Cuenta -->
+                                        <a class="dropdown-item" href="#!">
+                                            <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
+                                            Cuenta
+                                        </a>
+                                        <!-- Pedido -->
+                                        <a class="dropdown-item" href="estado.html">
+                                            <div class="dropdown-item-icon"><i data-feather="file"></i></div>
+                                            Pedidos
+                                        </a>
+                                        <!-- Salir -->
+                                        <a class="dropdown-item" href="#!">
+                                            <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
+                                            Salir
+                                        </a>
+                                        <!-- Entrar -->
+                                        <a class="dropdown-item" href="login.html">
+                                            <div class="dropdown-item-icon"><i data-feather="log-in"></i></div>
+                                            Entrar
+                                        </a>
+                                        <!-- Registrarme -->
+                                        <a class="dropdown-item" href="login.html">
+                                            <div class="dropdown-item-icon"><i data-feather="edit-2"></i></div>
+                                            Registrarme
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                            <!-- BOTON COMPRAR -->
+                            
+                </nav>
+                <!-- INICIO HEADER -->
+                <!-- <header class="page-header page-header-dark bg-img-cover overlay"
+                    style='background-image: url("https://source.unsplash.com/hrlvr2ZlUNk/1500x700")'>
+                    <div class="page-header-content">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-xl-8 col-lg-10 text-center">
+                                    <h1 class="page-header-title">Find the best businesses in town</h1>
+                                    <p class="page-header-text mb-5">Search for restaurants, contractors, and other
+                                        local businesses in your area to find out which ones are the best!</p>
+                                    <form class="page-header-signup">
+                                        <div class="form-row justify-content-center">
+                                            <div class="col-lg-6 col-md-8">
+                                                <div class="form-group mr-0 mr-lg-2"><label class="sr-only"
+                                                        for="inputSearch">Find local businesses...</label><input
+                                                        class="form-control form-control-solid rounded-pill"
+                                                        id="inputSearch" type="text"
+                                                        placeholder="Find local businesses..." /></div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-4"><button
+                                                    class="btn btn-teal btn-block btn-marketing rounded-pill"
+                                                    type="submit">Search</button></div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="svg-border-angled text-light">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"
+                            fill="currentColor">
+                            <polygon points="0,100 100,0 100,100"></polygon>
+                        </svg>
+                    </div>
+                </header> -->
+            </main>
+        </div>

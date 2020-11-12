@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-11-2020 13:52:40 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="modelo.Sede" table="sede" catalog="deliveryduoc" optimistic-lock="version">
+        <id name="idSede" type="java.lang.Integer">
+            <column name="id_sede" />
+            <generator class="identity" />
+        </id>
+        <property name="nombreSede" type="string">
+            <column name="nombre_sede" length="50" not-null="true" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="direccion" length="100" not-null="true" />
+        </property>
+        <set name="ubicacions" table="ubicacion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_sede" not-null="true" />
+            </key>
+            <one-to-many class="modelo.Ubicacion" />
+        </set>
+        <set name="puntoVentas" table="punto_venta" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_sede" not-null="true" />
+            </key>
+            <one-to-many class="modelo.PuntoVenta" />
+        </set>
+    </class>
+</hibernate-mapping>
