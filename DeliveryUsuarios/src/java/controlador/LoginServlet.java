@@ -32,19 +32,7 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        response.setContentType("text/html;charset=UTF-8");        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -74,10 +62,14 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        //esto es de un carrito y aqui no aplica pero lo deje para usarlo despues
+        //busco si hay un login activo
         Usuario usuario=(Usuario) request.getSession().getAttribute("login");
-        
+        //si no hay un login
         if (usuario == null) {
+            //instacio un usuario
             usuario= new Usuario();
+            //creo login
             request.getSession().setAttribute("login", request);
         }
         

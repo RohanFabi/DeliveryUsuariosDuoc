@@ -48,6 +48,7 @@ public class DetalleCompra extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        //redirecciona a pagina
         request.getRequestDispatcher("Delivery/detalle_compra.jsp").forward(request, response);
     }
 
@@ -63,6 +64,7 @@ public class DetalleCompra extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        //redirecciona a pagina
         request.getRequestDispatcher("Delivery/detalle_compra.jsp").forward(request, response);
 
     }

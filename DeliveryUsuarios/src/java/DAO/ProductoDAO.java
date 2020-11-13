@@ -5,11 +5,6 @@
  */
 package DAO;
 
-import conexion.Conexion;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,9 +19,7 @@ import org.hibernate.Transaction;
  * @author dream
  */
 public class ProductoDAO {
-    
-    private static Conexion objConn = Conexion.InstanciaConn();
-    private ResultSet rs;
+
     
     public List<Producto> listarProductos() {
         List<Producto> productos = null;
@@ -44,25 +37,23 @@ public class ProductoDAO {
         return productos;
     }
     
-    public ArrayList<Producto> listarProductoIdTienda(int id_punto_venta) {
+    public List<Producto> listarProductoIdTienda(int idPuntoVenta) {
+        List<Producto> productos = null;
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
-            ArrayList<Producto> LPro = new ArrayList();
-            PreparedStatement ps;
+            String hql = "from Producto p where p.idProducto= :id";            
+            Query q = sesion.createQuery(hql);
+            q.setParameter("id", idPuntoVenta);
             
-            ps = objConn.getConn().prepareStatement("Select * from producto where id_punto_venta = ?");
-            ps.setInt(1, id_punto_venta);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-//                LPro.add(new Producto(rs.getInt("id_producto"), rs.getString("nombre"), rs.getInt("precio"), rs.getString("imagen"), rs.getBoolean("activo")));
-            }
-            return LPro;
-        } catch (SQLException ex) {
-            Logger.getLogger(ProductoDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            productos = q.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         } finally {
-            objConn.Cerrar();
+            sesion.close();
         }
+        return productos;
     }
+    
     
     public Producto buscarProducto(int id) {
         Producto producto = new Producto();

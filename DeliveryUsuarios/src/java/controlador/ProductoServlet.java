@@ -61,35 +61,50 @@ public class ProductoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        //instancio sesion
         HttpSession session = request.getSession();
-
+        //busco la operacion que viene en la url "Producto?op=..."
         String operacion = request.getParameter("op");
-
+        //si la operacion existe en la url
         if (operacion != null) {
+            //busco la ultima r en el valor
             int i = operacion.lastIndexOf("r");
+            //saco el valor hasta la r
             String op = operacion.substring(0, i + 1);
-            System.out.println(op);
+            //accion a tomar dependiendo del valor
             switch (op) {
 
                 case "crear":
+                    //si el valor es crear, por crear un nuevo producto
+                    //busco las categorias y las guardo en una lista
                     List<Categoria> categorias = objP.listarCategorias();
+                    //las guardo en un atributo para la pagina
                     session.setAttribute("categorias", categorias);
+                    //redirecciono a la pagina
                     request.getRequestDispatcher("Mantenedor/CrearProducto.jsp").forward(request, response);
                     break;
                 case "modificar":
+                    //si el valor es modificar 
+                    //entra a metodo modificar con ctrl+click en el nombre te lleva al metodo
                     verModificar(request, response);
                 case "eliminar":
+                    //si el valor es eliminar te lleva al metodo
                     eliminar(request, response);
                     break;
                 case "ver":
                 default:
+                    //esto enrealidad jamas deberia pasar pero porsiacaso
                     List<Producto> productos = objP.listarProductos();
                     session.setAttribute("productos", productos);
                     request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
             }
         } else {
+            //si no hay opcion en la url
+            //busco los productos y los guardo en una lista
             List<Producto> productos = objP.listarProductos();
+            //los guardo en un atributo para la pagina
             session.setAttribute("productos", productos);
+            //redirecciono a la pagina
             request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
         }
 
@@ -133,28 +148,44 @@ public class ProductoServlet extends HttpServlet {
     }
 
     private void verModificar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //leo el valor de la opcion que viene en la url
         String opcion = request.getParameter("op");
+        //busco la ultima r en el valor
         int i = request.getParameter("op").lastIndexOf("r");
+        //busco el id que viene despues de la r del valor
         int id = Integer.parseInt(opcion.substring(i + 1));
+        //busco el producto con el id
         Producto producto = objP.buscarProducto(id);
+        //busco las categorias
         List<Categoria> categorias = objP.listarCategorias();
+        //instancio una sesion
         HttpSession session = request.getSession();
+        //guardo en un aributo las categorias y el producto
         session.setAttribute("categorias", categorias);
         session.setAttribute("producto", producto);
+//        redirecciono a la pagina
         request.getRequestDispatcher("Mantenedor/ModificarProducto.jsp").forward(request, response);
     }
 
     private void guardarProducto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //busco el nombre del input
         String nombre = request.getParameter("nombre");
+        //busco el precio del input
         int precio = Integer.parseInt(request.getParameter("precio"));
+        //busco la categoria del combobox
         int categoria = Integer.parseInt(request.getParameter("categoria"));
         //ESTE HAY QUE CAMBIARLO cuando tengamos el id de la tienda por sesion
         int puntoVenta = 1;
-        //guardar imagen en el proyecto
+        //GUARDAR IMAGEN EN EL PROYECTO
+        //busco el nombre de la imagen del input que esta oculto
         String imagen = request.getParameter("nombreImagen");
+        //busco el archivo de imagen
         Part archivo = request.getPart("imagen");
+        //lo transforma en una cadena de datos
         InputStream is = archivo.getInputStream();
+        //crea un archivo en la locacion indicada
         File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+        //lee los datos y los guarda en el archivo
         FileOutputStream ous = new FileOutputStream(f);
         int dato = is.read();
         while (dato != -1) {
@@ -163,32 +194,46 @@ public class ProductoServlet extends HttpServlet {
         }
         ous.close();
         is.close();
-
+        //FIN GUARDAR IMAGEN
+        //hago una categoria y le seteo el id
         Categoria cat = new Categoria();
         cat.setIdCategoria(categoria);
+        //hago un punto de venta y le seteo el id
         PuntoVenta punto = new PuntoVenta();
         punto.setIdPuntoVenta(puntoVenta);
+        //id del producto = guardar producto en la bd
         int guardado = objP.guardar(new Producto(cat, punto, nombre, precio, imagen, true));
+        //redirecciono a la pagina
         request.getRequestDispatcher("Mantenedor/CrearProducto.jsp").forward(request, response);
     }
 
     private void modificarProducto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //busco el id del input oculto
         int idProducto = Integer.parseInt(request.getParameter("id"));
+        //busco el nombre del input
         String nombre = request.getParameter("nombre");
+        //busco el precio del input
         int precio = Integer.parseInt(request.getParameter("precio"));
+        //busco la categoria del combobox
         int categoria = Integer.parseInt(request.getParameter("categoria"));
         //ESTE HAY QUE CAMBIARLO cuando tengamos el id de la tienda por sesion
         int puntoVenta = 1;
-
+        //GUARDAR IMAGEN EN EL PROYECTO
+        //busco el nombre de la imagen del input que esta oculto
         String imagen = request.getParameter("nombreImagen");
         //si la imagen no fue cambiada
         if (imagen.isEmpty()) {
+            //guardo el nombre de la imagen actual qque esta en el input oculto
             imagen = request.getParameter("imagenActual");
         } else {
-            //guardar imagen en el proyecto 
+            //GUARDAR IMAGEN EN EL PROYECTO 
+            //busco el archivo de imagen
             Part archivo = request.getPart("imagen");
+            //lo transforma en una cadena de datos
             InputStream is = archivo.getInputStream();
+            //crea un archivo en la locacion indicada
             File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+            //lee los datos y los guarda en el archivo
             FileOutputStream ous = new FileOutputStream(f);
             int dato = is.read();
             while (dato != -1) {
@@ -199,17 +244,22 @@ public class ProductoServlet extends HttpServlet {
             is.close();
         }
 
+        //hago una categoria y le seteo el id
         Categoria cat = new Categoria();
         cat.setIdCategoria(categoria);
+        //hago un punto de venta y le seteo el id
         PuntoVenta punto = new PuntoVenta();
         punto.setIdPuntoVenta(puntoVenta);
-
+        //instancio un producto con los datos
         Producto producto = new Producto(cat, punto, nombre, precio, imagen, true);
         producto.setIdProducto(idProducto);
+        //modificar producto
         objP.modificar(producto);
-        
+
         HttpSession session = request.getSession();
+        //guardo elproducto para verlo con los nuevos datos
         session.setAttribute("producto", producto);
+        //redirecciono a la pagina
         request.getRequestDispatcher("Mantenedor/ModificarProducto.jsp").forward(request, response);
     }
 

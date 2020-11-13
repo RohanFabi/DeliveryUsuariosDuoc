@@ -40,17 +40,7 @@ public class AchoclonadosServlet extends HttpServlet {
     ProductoDAO objP = new ProductoDAO();
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        response.setContentType("text/html;charset=UTF-8");
-//        
-//        HttpSession session = request.getSession();
-//        //esto es para la seccion de abajo que muestra todas las tiendas y todos los productos
-//        List<PuntoVenta> tiendas = objPV.listarPuntos();
-//        session.setAttribute("tiendas", tiendas);
-//
-//        List<Producto> productos = objP.listarProductos();
-//        session.setAttribute("productos", productos);
-//        
-//        response.sendRedirect("Delivery/Achoclonados.jsp");
+        response.setContentType("text/html;charset=UTF-8");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -66,15 +56,18 @@ public class AchoclonadosServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        
+        //instancio sesion
         HttpSession session = request.getSession();
-        //esto es para la seccion de abajo que muestra todas las tiendas y todos los productos
+        //esto es para la seccion de abajo que muestra todas las tiendas y todos los productos:
+        //busco las tiendas y guardo en lista
         List<PuntoVenta> tiendas = objPV.listarPuntos();
+        //guardo la lista en un atributo para mostrarla
         session.setAttribute("tiendas", tiendas);
-
+        //busco todos los productos y guardo en lista
         List<Producto> productos = objP.listarProductos();
+        //guardo la lista en atributo para mostrarla
         session.setAttribute("productos", productos);
-        
+        //redirecciono a pagina
         request.getRequestDispatcher("Delivery/Achoclonados.jsp").forward(request, response);
     }
 
