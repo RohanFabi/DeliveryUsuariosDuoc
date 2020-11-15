@@ -24,7 +24,7 @@
     </head>
     <body>
         <div id="layoutDefault">
-            <jsp:include page="WEB-INF/jspf/menuPrincipal.jspf"/>
+            <%@ include file= "WEB-INF/jspf/header.jsp" %> 
             <!-- SECCCION TITULO Y TIENDAS -->
             <section class="bg-light py-5">
                 <div class="container">
@@ -76,7 +76,7 @@
                                 <div class="col-lg-6">
                                     <div class="input-group mb-2">
                                         <input class="form-control form-control-solid" type="text"
-                                               placeholder="youremail@example.com" aria-label="Recipient's username"
+                                               placeholder="tuEmail@ejemplo.com" aria-label="Recipient's username"
                                                aria-describedby="button-addon2" />
                                         <div class="input-group-append"><button class="btn btn-primary"
                                                                                 id="button-addon2" type="button">Suscribirme</button></div>

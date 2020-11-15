@@ -1,4 +1,4 @@
-        <!-- CONTENT -->
+<!-- CONTENT -->
         <div id="layoutDefault_content">
             <main>
                 <nav class="navbar navbar-marketing navbar-expand-lg navbar-light" style="background-color:001B37 ;">
@@ -113,10 +113,10 @@
                                     <a class=" dropdown-toggle" id="navbarDropdownUserImage" href="" role="button"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-                                        <!-- Imagen usuaurio en nav -->
+                                        <!-- Imagen usuario en nav -->
                                         <div class="avatar avatar-online avatar-lg mr-1">
                                             <img class="avatar-img img-fluid"
-                                                 src="img/logosTiendas/logo-ACHOCLONADOS.png">
+                                                 src="img/logosTiendas/Missing_avatar.png">
                                         </div>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -125,10 +125,9 @@
                                         <!--la siguiente etiqueta era un h6 pero daba un error 
                                         -no puede tener un div dentro, la cambie por div-->
                                         <div class="dropdown-header d-flex align-items-center">
-                                            <img class="dropdown-user-img"
-                                                 src="https://source.unsplash.com/QAB-WJcbgJk/60x60" />
+                                            <img class="dropdown-user-img" src="img/logosTiendas/Missing_avatar.png">
                                             <div class="dropdown-user-details">
-                                                <div class="dropdown-user-details-name"></div>
+                                                <div class="dropdown-user-details-name">Desconocido</div>
                                                 <div class="dropdown-user-details-email"></div>
                                             </div>
                                         </div>
@@ -169,3 +168,4 @@
                 </nav>
             </main>
         </div>
+        

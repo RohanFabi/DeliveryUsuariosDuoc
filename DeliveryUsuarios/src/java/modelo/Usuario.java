@@ -94,6 +94,10 @@ public class Usuario  implements java.io.Serializable {
     public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
+    
+    public int getIDTipoUsuario(){
+        return this.tipoUsuario.getIdTipoUsuario();
+    }
 
     
     @Column(name="rut", nullable=false, length=12)

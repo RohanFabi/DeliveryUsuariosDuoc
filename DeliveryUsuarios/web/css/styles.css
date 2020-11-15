@@ -97,6 +97,10 @@ section {
   display: block;
 }
 
+.center-block {
+    text-align: center;
+}
+
 body {
   margin: 0;
   font-family: "Metropolis", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
