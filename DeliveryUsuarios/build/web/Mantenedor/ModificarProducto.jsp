@@ -16,8 +16,7 @@
         <link href="css/styles.css" rel="stylesheet" />
         <!-- FLECHAS Y ICONOS NECESARIOS PARA EL DISEÑO (sacado de plantilla bootstrap) -->
         <link rel="icon" type="image/x-icon" href="img/logo_duoc.png" />
-        <script data-search-pseudo-elements defer
-        src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+        <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.24.1/feather.min.js" crossorigin="anonymous">
         </script>
         <script src="js/cargarArchivo.js" type="text/javascript"></script>
@@ -26,7 +25,7 @@
         <div id="layoutDefault">
             <div id="layoutDefault_content">
                 <main>
-                    <%@ include file= "../WEB-INF/jspf/header.jsp" %> 
+                    <jsp:include page="../WEB-INF/jspf/header.jsp" />
 
                     <br><br>
                     <h2 align="center">Modificar Producto</h2>

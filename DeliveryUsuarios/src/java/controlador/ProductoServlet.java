@@ -168,6 +168,8 @@ public class ProductoServlet extends HttpServlet {
     }
 
     private void guardarProducto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //instancio sesion
+        HttpSession session = request.getSession();
         //busco el nombre del input
         String nombre = request.getParameter("nombre");
         //busco el precio del input
@@ -184,7 +186,7 @@ public class ProductoServlet extends HttpServlet {
         //lo transforma en una cadena de datos
         InputStream is = archivo.getInputStream();
         //crea un archivo en la locacion indicada
-        File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+        File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
         //lee los datos y los guarda en el archivo
         FileOutputStream ous = new FileOutputStream(f);
         int dato = is.read();
@@ -202,7 +204,7 @@ public class ProductoServlet extends HttpServlet {
         PuntoVenta punto = new PuntoVenta();
         punto.setIdPuntoVenta(puntoVenta);
         //id del producto = guardar producto en la bd
-        int guardado = objP.guardar(new Producto(cat, punto, nombre, precio, imagen, true));
+        int id = objP.guardar(new Producto(cat, punto, nombre, precio, imagen, true));
         //redirecciono a la pagina
         request.getRequestDispatcher("Mantenedor/CrearProducto.jsp").forward(request, response);
     }
@@ -232,7 +234,7 @@ public class ProductoServlet extends HttpServlet {
             //lo transforma en una cadena de datos
             InputStream is = archivo.getInputStream();
             //crea un archivo en la locacion indicada
-            File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+            File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
             //lee los datos y los guarda en el archivo
             FileOutputStream ous = new FileOutputStream(f);
             int dato = is.read();

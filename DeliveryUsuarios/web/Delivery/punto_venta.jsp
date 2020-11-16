@@ -23,7 +23,7 @@
     </head>
     <body>
         <div id="layoutDefault">
-            <jsp:include page="../WEB-INF/jspf/header.jspf"/>
+            <jsp:include page="../WEB-INF/jspf/header.jsp"/>
             <!-- LOGO DE TIENDA y SECCION BUSCAR -->
             <div class="container">
                 <div class="d-flex justify-content-center pb-5 ">
