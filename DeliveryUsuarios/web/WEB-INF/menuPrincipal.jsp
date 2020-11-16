@@ -1,6 +1,17 @@
-<!-- CONTENT -->
-<div id="layoutDefault_content">
-    <main>
+<%-- 
+    Document   : menuPrincipal
+    Created on : 16-11-2020, 12:48:44
+    Author     : dream
+--%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
         <nav class="navbar navbar-marketing navbar-expand-lg navbar-light" style="background-color:001B37 ;">
             <div class="container">
                 <img class="img-fluid" src="img/logo-duoc-uc-universidad-catolica.jpg" alt="">
@@ -103,7 +114,7 @@
                                     <div>
                                         <div class="small text-gray-500">Opciones de retiro</div>
                                         Puede retirar los productos en tienda o seleccionar delivery a su
-                                        ubicacion dentro de la institución
+                                        ubicacion dentro de la instituciÃ³n
                                     </div>
                                 </a>
                             </div>
@@ -128,8 +139,8 @@
                                     <img class="dropdown-user-img"
                                          src="https://source.unsplash.com/QAB-WJcbgJk/60x60" />
                                     <div class="dropdown-user-details">
-                                        <div class="dropdown-user-details-name"></div>
-                                        <div class="dropdown-user-details-email"></div>
+                                        <div class="dropdown-user-details-name">${login.nombre}</div>
+                                        <div class="dropdown-user-details-email" style="word-wrap: break-word">${login.email}</div>
                                     </div>
                                 </div>
                                 <div class="dropdown-divider"></div>
@@ -143,12 +154,14 @@
                                     <div class="dropdown-item-icon"><i data-feather="file"></i></div>
                                     Pedidos
                                 </a>
+                                <c:if test="${login !=null}">
                                 <!-- Salir -->
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="Login">
                                     <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
                                     Salir
                                 </a>
-                                <c:if test="${sessionScope.login == null}">
+                                </c:if>
+                                <c:if test="${login == null}">
                                     <!-- Entrar -->
                                     <a class="dropdown-item" href="Login">
                                         <div class="dropdown-item-icon"><i data-feather="log-in"></i></div>
@@ -169,5 +182,5 @@
                 </div>
             </div>
         </nav>
-    </main>
-</div>
+    </body>
+</html>

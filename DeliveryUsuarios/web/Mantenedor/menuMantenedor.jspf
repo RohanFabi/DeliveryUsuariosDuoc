@@ -51,7 +51,7 @@
                                             Pedidos
                                         </a>
                                         <!-- Salir -->
-                                        <a class="dropdown-item" href="#!">
+                                        <a class="dropdown-item" href="Login">
                                             <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
                                             Salir
                                         </a>
@@ -60,11 +60,11 @@
                                             <div class="dropdown-item-icon"><i data-feather="log-in"></i></div>
                                             Entrar
                                         </a>
-                                        <!-- Registrarme -->
+                                        <!-- Registrarme 
                                         <a class="dropdown-item" href="login.html">
                                             <div class="dropdown-item-icon"><i data-feather="edit-2"></i></div>
                                             Registrarme
-                                        </a>
+                                        </a>-->
                                     </div>
                                 </li>
                             </ul>
