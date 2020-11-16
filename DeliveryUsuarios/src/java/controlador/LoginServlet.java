@@ -54,7 +54,9 @@ public class LoginServlet extends HttpServlet {
         request.getSession().removeAttribute("msjerror");
         //busco la info del login
         Usuario u = (Usuario) request.getSession().getAttribute("login");
-        //si hay un usuario logeado limpio la sesion y redirecciono
+        
+        //si hay un usuario logeado es porque entre con el boton salir
+        //entonces limpio la sesion y redirecciono
         if (u != null) {
             request.getSession().removeAttribute("login");
             response.sendRedirect("index");
