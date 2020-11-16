@@ -24,7 +24,7 @@
     </head>
     <body>
         <div id="layoutDefault">
-            <jsp:include page="WEB-INF/jspf/menuPrincipal.jspf"/>
+            <jsp:include page="WEB-INF/jspf/header.jsp"/>
             <!-- CONTENT -->
             <div id="layoutDefault_content">
                 <main>

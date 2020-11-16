@@ -23,7 +23,7 @@
     </head>
     <body>
         <div id="layoutDefault">
-            <jsp:include page="../WEB-INF/jspf/menuPrincipal.jspf"/>
+            <jsp:include page="../WEB-INF/jspf/header.jsp"/>
             <!----------------------------------------------------------------------->    
             <section class="bg-white pt-5 pb-10">
 

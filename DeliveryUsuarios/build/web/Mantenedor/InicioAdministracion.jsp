@@ -25,7 +25,7 @@
         <div id="layoutDefault">
             <div id="layoutDefault_content">
                 <main>
-                    <jsp:include page="menuMantenedor.jspf" />
+                    <jsp:include page="../WEB-INF/jspf/header.jsp" />
 
                     <br><br><br><br><br><br><br><br><br><br>
                     <h1 align="center"> Administracion</h1>

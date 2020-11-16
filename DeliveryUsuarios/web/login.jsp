@@ -25,7 +25,7 @@
     </head>
     <body>
         <div id="layoutAuthentication">
-            <jsp:include page="WEB-INF/jspf/menuPrincipal.jspf"/>
+            <jsp:include page="WEB-INF/jspf/header.jsp"/>
             <div id="layoutAuthentication_content" class="bg-duoc">
                 <main>
                     <div class="container">
