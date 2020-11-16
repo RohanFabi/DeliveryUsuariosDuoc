@@ -26,7 +26,7 @@
         <div id="layoutDefault">
             <div id="layoutDefault_content">
                 <main>
-                    <jsp:include page="menuMantenedor.jspf" />
+                    <%@ include file= "../WEB-INF/jspf/header.jsp" %> 
 
                     <br><br>
                     <h2 align="center">Modificar Producto</h2>

@@ -3,12 +3,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>   
 
-<%
-    HttpSession objSes = request.getSession();
-    Usuario user = (Usuario)objSes.getAttribute("usuario");
+<% 
+    HttpSession objSes = request.getSession(); 
+    Usuario user = (Usuario)objSes.getAttribute("usuario"); 
     if (user.getTipoUsuario()==null){ //Si el usuario actual no tiene tipo definido (no ha iniciado sesión) 
-%>
-        <div id="layoutDefault_content">
+%> 
+        <div id="layoutDefault_content"> 
             <main>
                 <nav class="navbar navbar-marketing navbar-expand-lg navbar-light" style="background-color: 001B37;">
                     <div class="container">
