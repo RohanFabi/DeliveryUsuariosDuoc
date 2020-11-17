@@ -59,7 +59,7 @@
                                                 <input type="submit" name="Ingresar" id="ingresar" value="Ingresar" class="btn btn-primary"/></div>
                                         </form>
                                         <c:if test="${not empty msjerror}">
-                                            <br><br><br><br>
+                                            <br><br>
                                             <div class="alert alert-danger">
                                                 ${msjerror}
                                             </div>
