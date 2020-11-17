@@ -45,12 +45,10 @@
                                                     <!-- COLUMNA IZQUIERDA -->
                                                     <div class="col-lg-6">
                                                         <h6 class="dropdown-header text-primary">Puntos</h6>
-                                                        <a class="dropdown-item" href="Doggis">Doggis</a>
-                                                        <a class="dropdown-item" href="{%url 'Bistro'%}">Bistro</a>
-                                                        <a class="dropdown-item" href="{%url 'Starbuck'%}">Starbucks</a>
-                                                        <a class="dropdown-item" href="Achoclonados">Achoclonados</a>
+                                                        <c:forEach items="${puntos}" var="t">
+                                                            <a class="dropdown-item" href="PuntoVenta?pv=${t.nombre}">${t.nombre}</a>
+                                                        </c:forEach>
                                                         <div class="dropdown-divider border-0"></div>
-
                                                     </div>
                                                     <!-- COLUMNA DERECHA -->
                                                     <div class="col-lg-6">
@@ -147,7 +145,7 @@
                                             Pedidos
                                         </a>
                                         <!-- Salir -->
-                                        <a class="dropdown-item" href="#!">
+                                        <a class="dropdown-item" href="Login">
                                             <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
                                             Salir
                                         </a>
@@ -268,10 +266,9 @@
                                                                     <!-- COLUMNA IZQUIERDA -->
                                                                     <div class="col-lg-6">
                                                                         <h6 class="dropdown-header text-primary">Puntos</h6>
-                                                                        <a class="dropdown-item" href="Doggis">Doggis</a>
-                                                                        <a class="dropdown-item" href="{%url 'Bistro'%}">Bistro</a>
-                                                                        <a class="dropdown-item" href="{%url 'Starbuck'%}">Starbucks</a>
-                                                                        <a class="dropdown-item" href="Achoclonados">Achoclonados</a>
+                                                                        <c:forEach items="${puntos}" var="t">
+                                                                            <a class="dropdown-item" href="PuntoVenta?pv=${t.nombre}">${t.nombre}</a>
+                                                                        </c:forEach>
                                                                         <div class="dropdown-divider border-0"></div>
 
                                                                     </div>
