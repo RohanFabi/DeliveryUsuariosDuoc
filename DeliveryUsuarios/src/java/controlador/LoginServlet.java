@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
         request.getSession().removeAttribute("msjerror");
         //busco la info del login
         Usuario u = (Usuario) request.getSession().getAttribute("login");
-        
+
         //si hay un usuario logeado es porque entre con el boton salir
         //entonces limpio la sesion y redirecciono
         if (u != null) {
@@ -59,20 +59,23 @@ public class LoginServlet extends HttpServlet {
         //busco si hay un login activo
         UsuarioDAO udao = new UsuarioDAO();
         Usuario usuario = udao.buscarUsuarioLogin(email, contrasena);
-
-        if (usuario.isActivo()) {
-            if (usuario.getTipoUsuario().getIdTipoUsuario() == 2) {
-                request.getSession().setAttribute("tipo", "Administrador");
-                request.getSession().setAttribute("login", usuario);
-                response.sendRedirect("Administracion");
-            } else if (usuario.getTipoUsuario().getIdTipoUsuario() == 3) {
-                request.getSession().setAttribute("tipo", "Colaborador");
-                request.getSession().setAttribute("login", usuario);
-                response.sendRedirect("index");
-            } else {
-                request.getSession().setAttribute("msjerror", "Dirijase a modulo de administracion");
-                //redirecciono para q no borre el mensaje
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+        //si te devolvio algun usuario
+        if (usuario != null) {
+            //si el usuario esta activo
+            if (usuario.isActivo()) {
+                if (usuario.getTipoUsuario().getIdTipoUsuario() == 2) {
+                    request.getSession().setAttribute("tipo", "Administrador");
+                    request.getSession().setAttribute("login", usuario);
+                    response.sendRedirect("Administracion");
+                } else if (usuario.getTipoUsuario().getIdTipoUsuario() == 3) {
+                    request.getSession().setAttribute("tipo", "Colaborador");
+                    request.getSession().setAttribute("login", usuario);
+                    response.sendRedirect("index");
+                } else {
+                    request.getSession().setAttribute("msjerror", "Dirijase a modulo de administracion");
+                    //redirecciono para q no borre el mensaje
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                }
             }
 
         } else {
