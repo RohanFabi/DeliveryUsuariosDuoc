@@ -6,9 +6,12 @@
 package test;
 
 import DAO.ProductoDAO;
+import DAO.PuntoVentaDAO;
 import java.util.Iterator;
 import java.util.List;
+import modelo.Categoria;
 import modelo.Producto;
+import modelo.PuntoVenta;
 
 /**
  *
@@ -21,14 +24,19 @@ public class Test {
      */
     public static void main(String[] args) {
         ProductoDAO pd = new ProductoDAO();
-        Producto p = pd.buscarProducto(3);
+//        List<Categoria> categorias = pd.listarCategoriasPunto(1);
+//
+//        for (Categoria c : categorias) {
+//            System.out.println(c.getIdCategoria()+" "+c.getDescripcion());
+//        }
 
-        System.out.println("producto "+p.getNombre());
-        
-        p.setNombre("jugo 200cc");
-        pd.modificar(p);
-        p = pd.buscarProducto(3);
-        System.out.println("producto "+p.getNombre());
+//            PuntoVentaDAO pvDAO=new PuntoVentaDAO();
+//            PuntoVenta pv=pvDAO.buscarNombreSede("Achoclonados", 1);
+//            System.out.println("nombre punto "+pv.getNombre());
+        List<Producto> productos = pd.listarProductoIdTienda(1);
+        for (Producto c : productos) {
+            System.out.println(c.getNombre()+" "+c.getPrecio());
+        }
 
     }
 

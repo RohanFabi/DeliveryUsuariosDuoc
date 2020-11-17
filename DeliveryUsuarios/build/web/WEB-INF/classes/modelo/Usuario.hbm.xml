@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 10-11-2020 13:52:40 by Hibernate Tools 4.3.1 -->
+<!-- Generated 17-11-2020 11:48:39 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="modelo.Usuario" table="usuario" catalog="deliveryduoc" optimistic-lock="version">
         <id name="idUsuario" type="java.lang.Integer">
@@ -10,6 +10,9 @@
         </id>
         <many-to-one name="puntoVenta" class="modelo.PuntoVenta" fetch="select">
             <column name="id_punto_venta" />
+        </many-to-one>
+        <many-to-one name="sede" class="modelo.Sede" fetch="select">
+            <column name="id_sede" />
         </many-to-one>
         <many-to-one name="tipoUsuario" class="modelo.TipoUsuario" fetch="select">
             <column name="id_tipo_usuario" not-null="true" />

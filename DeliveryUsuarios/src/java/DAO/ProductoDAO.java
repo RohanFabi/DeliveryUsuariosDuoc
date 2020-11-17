@@ -41,7 +41,7 @@ public class ProductoDAO {
         List<Producto> productos = null;
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
-            String hql = "from Producto p where p.idProducto= :id";            
+            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :id";            
             Query q = sesion.createQuery(hql);
             q.setParameter("id", idPuntoVenta);
             
@@ -116,4 +116,22 @@ public class ProductoDAO {
             sesion.close();
         }
     }
+    
+    public List<Categoria> listarCategoriasPunto(int idPuntoVenta){
+        List<Categoria> categorias = null;
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "Select new Categoria(c.idCategoria, c.descripcion) from Producto as p inner join p.categoria as c where p.puntoVenta.idPuntoVenta= :idPuntoVenta"
+                    + " group by c.idCategoria";
+            Query q = sesion.createQuery(hql);
+            q.setParameter("idPuntoVenta", idPuntoVenta);
+            
+            categorias = q.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return categorias;
+    } 
 }
