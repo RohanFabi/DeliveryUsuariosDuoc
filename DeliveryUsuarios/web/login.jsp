@@ -59,9 +59,6 @@
                                             </div>
                                         </c:if>
                                     </div>
-                                    <div class="card-footer text-center">
-                                        <div class="small"><a href="Registro">Registrarme!</a></div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
