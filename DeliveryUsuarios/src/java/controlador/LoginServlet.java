@@ -80,7 +80,7 @@ public class LoginServlet extends HttpServlet {
 
         } else {
             //guardo un mensaje
-            request.getSession().setAttribute("msjerror", "email o contraseña incorrectas, si olvido su contraseña dirijase a un administrador");
+            request.getSession().setAttribute("msjerror", "Email o contraseña incorrectas, si olvido su contraseña comuniquese con un administrador");
             //redirecciono para q no borre el mensaje
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
