@@ -3,7 +3,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html> 
 <c:choose>
-    <c:when test="${login.tipoUsuario.idTipoUsuario ==3}">
+    <c:when test="${login.tipoUsuario.idTipoUsuario ==3}"> <!-- -->
         <div id="layoutDefault_content">
             <main>
                 <nav class="navbar navbar-marketing navbar-expand-lg navbar-light" style="background-color:001B37 ;">
@@ -363,11 +363,6 @@
                                                         <a class="dropdown-item" href="Login">
                                                             <div class="dropdown-item-icon"><i data-feather="log-in"></i></div>
                                                             Ingresar
-                                                        </a>
-                                                        <!-- Registrarme -->
-                                                        <a class="dropdown-item" href="Registro">
-                                                            <div class="dropdown-item-icon"><i data-feather="edit-2"></i></div>
-                                                            Registrarme
                                                         </a>
                                                     </div>
                                                 </li>

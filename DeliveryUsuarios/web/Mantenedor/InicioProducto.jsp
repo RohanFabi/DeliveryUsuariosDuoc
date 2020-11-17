@@ -33,36 +33,29 @@
                     <br>
                     <div>
                         <h2 align="center">Creación de Producto</h2>
-
+                        <br>
                     </div>
-                    <br>
                     <form method="POST" enctype="multipart/form-data" name="guardarProducto" action="Producto">
                         <table align="center" >                            
                             <tr>
                                 <th><label for="nombre">Nombre</label></th>
                                 <th><input type="text" id="nombre" name="nombre" required></th>
-                            </tr>
-                            <tr>
                                 <th><label for="precio">Precio</label></th>
                                 <th><input type="text" id="precio" name="precio" required></th>
-                            </tr>
-                            <tr>
                                 <th><label for="categoria">Categoria</label></th>
                                 <th><select name="categoria">
                                         <option value="">Seleccionar</option>
                                         <c:forEach var="c" items="${categorias}">
                                             <option value="${c.idCategoria}">${c.descripcion}</option>
                                         </c:forEach>
-                                    </select>
-                                </th>
-                            </tr>
-                            <tr>
+                                    </select> 
                                 <th><label for="imagen">Imagen</label></th>
                                 <th><input class="form-control" type="file" name="imagen" onchange="cargarArchivo(this)"></th>
                             </tr>
                         </table>
                         <input type="hidden" name="nombreImagen" value="">
                         <!--este no lo puedo alinear lo meti en un div y tampoco-->
+                        <br>
                         <div class="center-block"><input type="submit" value="Guardar" name="guardar"></div>
                     </form>
                     <iframe name="null" style="display: none;"></iframe>
