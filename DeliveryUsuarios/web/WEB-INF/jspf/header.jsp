@@ -79,7 +79,7 @@
                                             <div class="icon-stack bg-primary-soft text-primary mr-4"><i
                                                     class="fas fa-book-open"></i></div>
                                             <div>
-                                                <div class="small text-gray-500">Como comprar?</div>
+                                                <div class="small text-gray-500">¿Cómo comprar?</div>
                                                 Para comprar necesita estar registrado en el sistema.
                                             </div>
                                         </a>
@@ -118,7 +118,7 @@
                                         <!-- Imagen usuario en nav -->
                                         <div class="avatar avatar-online avatar-lg mr-1">
                                             <img class="avatar-img img-fluid"
-                                                 src="img/logosTiendas/Missing_avatar.png">
+                                                 src="img/Missing_avatar.png">
                                         </div>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -127,7 +127,7 @@
                                         <!--la siguiente etiqueta era un h6 pero daba un error 
                                         -no puede tener un div dentro, la cambie por div-->
                                         <div class="dropdown-header d-flex align-items-center">
-                                            <img class="dropdown-user-img" src="img/logosTiendas/Missing_avatar.png">
+                                            <img class="dropdown-user-img" src="img/Missing_avatar.png">
                                             <div class="dropdown-user-details">
                                                 <div class="dropdown-user-details-name">${login.nombre}</div>
                                                 <div class="dropdown-user-details-email">${login.email}</div>
@@ -173,10 +173,10 @@
                     </button>
                     <ul class="navbar-nav ml-auto mr-lg-5">
                         <!-- INCIO -->
-                        <li class="nav-item"><a class="nav-link" href="index">Inicio Tienda </a></li>
-                        <li class="nav-item"><a class="nav-link" href="Administracion">Inicio Administracion </a></li>
-                        <li class="nav-item"><a class="nav-link" href="Producto">Producto </a></li>
-                        <li class="nav-item"><a class="nav-link" href="{%url 'Iniciooferta'%}">Oferta </a></li>
+                        <li class="nav-item"><a class="nav-link" href="index">Inicio </a></li>
+                        <li class="nav-item"><a class="nav-link" href="Administracion">Listado de Pedidos </a></li>
+                        <li class="nav-item"><a class="nav-link" href="Producto">Productos </a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Promociones </a></li>
 
                         <li class="nav-item dropdown no-caret  dropdown-user">
                             <a class=" dropdown-toggle" id="navbarDropdownUserImage" href="" role="button"
@@ -184,8 +184,8 @@
 
                                 <!-- Imagen usuaurio en nav -->
                                 <div class="avatar avatar-online avatar-lg mr-1">
-                                    <img class="avatar-img img-fluid"
-                                         src="img/logosTiendas/logo-ACHOCLONADOS.png">
+                                    <img class="avatar-img img-fluid" src="img/logosTiendas/logo-ACHOCLONADOS.png"> 
+                                    <!--<img class="avatar-img img-fluid" src="img/logosTiendas/"> -->
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
@@ -200,13 +200,15 @@
                                     </div>
                                 </div>
                                 <div class="dropdown-divider"></div>
-                                <!-- Cuenta -->
+                                
+                                <!-- Cuenta --> <!--
                                 <a class="dropdown-item" href="#!">
                                     <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                                     Cuenta
-                                </a>
+                                </a> -->
+                                
                                 <!-- Pedido -->
-                                <a class="dropdown-item" href="estado.html">
+                                <a class="dropdown-item" href="Administracion">
                                     <div class="dropdown-item-icon"><i data-feather="file"></i></div>
                                     Pedidos
                                 </a>
@@ -338,7 +340,7 @@
                                         <!-- Imagen usuario en nav -->
                                         <div class="avatar avatar-online avatar-lg mr-1">
                                             <img class="avatar-img img-fluid"
-                                                 src="img/logosTiendas/Missing_avatar.png">
+                                                 src="img/Missing_avatar.png">
                                         </div>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"

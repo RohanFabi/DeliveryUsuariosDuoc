@@ -27,15 +27,28 @@
                 <main>
                     <jsp:include page="../WEB-INF/jspf/header.jsp" />
 
-                    <br><br><br><br><br><br><br><br><br><br>
-                    <h1 align="center"> Administracion</h1>
-                    <h1 align="center"> Productos y Tiendas</h1>
-                    <br><br><br><br><br><br><br><br><br><br>
-
+                    <h3 class="center-block">Listado de Pedidos</h3><br>
+                    <table id="listaPedidos" class="table table-bordered table-dark table-striped">
+                        <thead>
+                        <th scope="col">ID</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Contenido Pedido</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Handle</th>
+                        </thead>
+                        <tr>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                        </tr>
+                        
+                    </table>
                 </main>
             </div>
 
-            <jsp:include page="footerMantenedor.jspf" />    
+            <jsp:include page="../WEB-INF/jspf/footer.jspf" />
         </div>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous">

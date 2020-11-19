@@ -1,16 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package controlador;
 
 import DAO.ProductoDAO;
+import DAO.UsuarioDAO;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -23,6 +21,8 @@ import javax.servlet.http.Part;
 import modelo.Categoria;
 import modelo.Producto;
 import modelo.PuntoVenta;
+import modelo.Sede;
+import modelo.Usuario;
 
 /**
  *
@@ -32,15 +32,6 @@ import modelo.PuntoVenta;
 @MultipartConfig
 public class ProductoServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     ProductoDAO objP = new ProductoDAO();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -48,15 +39,6 @@ public class ProductoServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -65,6 +47,24 @@ public class ProductoServlet extends HttpServlet {
         HttpSession session = request.getSession();
         //busco la operacion que viene en la url "Producto?op=..."
         String operacion = request.getParameter("op");
+        //Si al acceder por url a gestionar productos, el usuario no es punto de venta, se le debe redirigir al indice.
+        Usuario u = (Usuario) session.getAttribute("login");
+        int id = 0; //Inicialización de la variable a un valor por defecto.
+        //Que intente acceder al metodo getIdTipoUsuario() de la clase TipoUsuario, para asignar el resultado a id. 
+        //Si falla, que rediriga al indice.
+        try {
+            id = u.getTipoUsuario().getIdTipoUsuario();
+        } catch (Exception e) {
+            request.getRequestDispatcher("index").forward(request, response);
+        }
+        if (id != 2) { //Si el usuario no es un Punto de Venta, también redirige al indice:
+            request.getRequestDispatcher("index").forward(request, response);
+        }
+        //Se buscan las categorias de productos y se guardan en una lista
+        List<Categoria> categorias = objP.listarCategorias();
+        //luego se guardan en un atributo para la pagina
+        session.setAttribute("categorias", categorias);
+
         //si la operacion existe en la url
         if (operacion != null) {
             //busco la ultima r en el valor
@@ -73,16 +73,6 @@ public class ProductoServlet extends HttpServlet {
             String op = operacion.substring(0, i + 1);
             //accion a tomar dependiendo del valor
             switch (op) {
-
-                case "crear":
-                    //si el valor es crear, por crear un nuevo producto
-                    //busco las categorias y las guardo en una lista
-                    List<Categoria> categorias = objP.listarCategorias();
-                    //las guardo en un atributo para la pagina
-                    session.setAttribute("categorias", categorias);
-                    //redirecciono a la pagina
-                    request.getRequestDispatcher("Mantenedor/CrearProducto.jsp").forward(request, response);
-                    break;
                 case "modificar":
                     //si el valor es modificar 
                     //entra a metodo modificar con ctrl+click en el nombre te lleva al metodo
@@ -93,7 +83,7 @@ public class ProductoServlet extends HttpServlet {
                     break;
                 case "ver":
                 default:
-                    //esto enrealidad jamas deberia pasar pero porsiacaso
+                    //esto enrealidad jamas deberia pasar pero por si acaso
                     List<Producto> productos = objP.listarProductos();
                     session.setAttribute("productos", productos);
                     request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
@@ -101,23 +91,15 @@ public class ProductoServlet extends HttpServlet {
         } else {
             //si no hay opcion en la url
             //busco los productos y los guardo en una lista
-            List<Producto> productos = objP.listarProductos();
+            Integer idPuntoVenta = ((Usuario) session.getAttribute("login")).getPuntoVenta().getIdPuntoVenta();
+            List<Producto> productos = objP.listarProductoIdTienda(idPuntoVenta);
             //los guardo en un atributo para la pagina
-            session.setAttribute("productos", productos);
+            session.setAttribute("productos", productos); 
             //redirecciono a la pagina
             request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
         }
-
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -126,22 +108,13 @@ public class ProductoServlet extends HttpServlet {
         switch (accion) {
             case "Guardar":
                 guardarProducto(request, response);
+                response.sendRedirect("Producto");
                 break;
             case "Modificar":
                 modificarProducto(request, response);
                 break;
         }
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
     private void eliminar(HttpServletRequest request, HttpServletResponse response) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -168,17 +141,21 @@ public class ProductoServlet extends HttpServlet {
     }
 
     private void guardarProducto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //instancio sesion
+        //Se guardan los atributos de la sesión temporalmente como objetos.
         HttpSession session = request.getSession();
+        
+        Usuario respUser = (Usuario)session.getAttribute("login");
+        List<Categoria> respCateg = (List<Categoria>)session.getAttribute("categoria");
+        List<PuntoVenta> respPuntosVenta = (List<PuntoVenta>)session.getAttribute("puntos");
+        List<Producto> respProducto = (List<Producto>)session.getAttribute("productos");
+        
         //busco el nombre del input
         String nombre = request.getParameter("nombre");
         //busco el precio del input
         int precio = Integer.parseInt(request.getParameter("precio"));
         //busco la categoria del combobox
         int categoria = Integer.parseInt(request.getParameter("categoria"));
-        //ESTE HAY QUE CAMBIARLO cuando tengamos el id de la tienda por sesion
-        int puntoVenta = 1;
-        //GUARDAR IMAGEN EN EL PROYECTO
+        //GUARDAR IMAGEN EN EL PROYECTO:
         //busco el nombre de la imagen del input que esta oculto
         String imagen = request.getParameter("nombreImagen");
         //busco el archivo de imagen
@@ -186,7 +163,8 @@ public class ProductoServlet extends HttpServlet {
         //lo transforma en una cadena de datos
         InputStream is = archivo.getInputStream();
         //crea un archivo en la locacion indicada
-        File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+//        File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+        File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
         //lee los datos y los guarda en el archivo
         FileOutputStream ous = new FileOutputStream(f);
         int dato = is.read();
@@ -195,18 +173,23 @@ public class ProductoServlet extends HttpServlet {
             dato = is.read();
         }
         ous.close();
-        is.close();
-        //FIN GUARDAR IMAGEN
+        is.close(); //FIN GUARDAR IMAGEN
         //hago una categoria y le seteo el id
         Categoria cat = new Categoria();
         cat.setIdCategoria(categoria);
-        //hago un punto de venta y le seteo el id
-        PuntoVenta punto = new PuntoVenta();
-        punto.setIdPuntoVenta(puntoVenta);
+        //hago un punto de venta y le seteo el id a partir del idPuntoVenta presente en el usuario respaldado.
+        PuntoVenta punto = respUser.getPuntoVenta(); 
         //id del producto = guardar producto en la bd
-        int id = objP.guardar(new Producto(cat, punto, nombre, precio, imagen, true));
-        //redirecciono a la pagina
-        request.getRequestDispatcher("Mantenedor/CrearProducto.jsp").forward(request, response);
+        Producto nuevoProd = new Producto(cat,punto,nombre,precio,imagen,true);
+        
+        int resultado = objP.guardar(nuevoProd);
+        
+        session = request.getSession();
+        session.setAttribute("login", respUser);
+        session.setAttribute("categoria", respCateg);
+        session.setAttribute("puntos", respPuntosVenta);
+        session.setAttribute("productos", respProducto);
+
     }
 
     private void modificarProducto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -218,8 +201,6 @@ public class ProductoServlet extends HttpServlet {
         int precio = Integer.parseInt(request.getParameter("precio"));
         //busco la categoria del combobox
         int categoria = Integer.parseInt(request.getParameter("categoria"));
-        //ESTE HAY QUE CAMBIARLO cuando tengamos el id de la tienda por sesion
-        int puntoVenta = 1;
         //GUARDAR IMAGEN EN EL PROYECTO
         //busco el nombre de la imagen del input que esta oculto
         String imagen = request.getParameter("nombreImagen");
@@ -234,7 +215,8 @@ public class ProductoServlet extends HttpServlet {
             //lo transforma en una cadena de datos
             InputStream is = archivo.getInputStream();
             //crea un archivo en la locacion indicada
-            File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+            //File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+            File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
             //lee los datos y los guarda en el archivo
             FileOutputStream ous = new FileOutputStream(f);
             int dato = is.read();
@@ -245,13 +227,13 @@ public class ProductoServlet extends HttpServlet {
             ous.close();
             is.close();
         }
-
         //hago una categoria y le seteo el id
         Categoria cat = new Categoria();
         cat.setIdCategoria(categoria);
         //hago un punto de venta y le seteo el id
+        Integer idPuntoVenta = 1;
         PuntoVenta punto = new PuntoVenta();
-        punto.setIdPuntoVenta(puntoVenta);
+        punto.setIdPuntoVenta(idPuntoVenta);
         //instancio un producto con los datos
         Producto producto = new Producto(cat, punto, nombre, precio, imagen, true);
         producto.setIdProducto(idProducto);
@@ -262,7 +244,8 @@ public class ProductoServlet extends HttpServlet {
         //guardo elproducto para verlo con los nuevos datos
         session.setAttribute("producto", producto);
         //redirecciono a la pagina
-        request.getRequestDispatcher("Mantenedor/ModificarProducto.jsp").forward(request, response);
+        
+        response.sendRedirect("Producto");
     }
 
 }

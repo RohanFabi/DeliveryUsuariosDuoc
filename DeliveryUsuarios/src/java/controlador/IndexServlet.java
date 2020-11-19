@@ -41,14 +41,7 @@ public class IndexServlet extends HttpServlet {
         //busco los puntos de ventas
         List<PuntoVenta> tiendas = objPV.listarPuntos();
         //instancio sesion
-        HttpSession session = request.getSession(); 
-        
-        //Si el usuario no contiene datos de usuario, se le crea y asigna un usuario vacío
-        if(session.getAttribute("usuario")==null){
-            Usuario user = new Usuario();
-            session.setAttribute("usuario",user);
-        }
-        
+        HttpSession session = request.getSession();         
         
         //lo guardo en un atributo de sesion para listar las tiendas
         session.setAttribute("puntos", tiendas);

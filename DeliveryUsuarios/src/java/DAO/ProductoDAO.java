@@ -20,7 +20,6 @@ import org.hibernate.Transaction;
  */
 public class ProductoDAO {
 
-    
     public List<Producto> listarProductos() {
         List<Producto> productos = null;
         Session sesion = HibernateUtil.getSessionFactory().openSession();
@@ -41,7 +40,7 @@ public class ProductoDAO {
         List<Producto> productos = null;
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
-            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :id";            
+            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :id order by p.idProducto desc";            
             Query q = sesion.createQuery(hql);
             q.setParameter("id", idPuntoVenta);
             
@@ -93,7 +92,7 @@ public class ProductoDAO {
         int id = 0;
         try {
             Transaction tx = sesion.beginTransaction();
-            id = (int) sesion.save(p);
+            id = (int)sesion.save(p);
             tx.commit();
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -43,14 +43,14 @@
                                 <th><label for="precio">Precio</label></th>
                                 <th><input type="text" id="precio" name="precio" required></th>
                                 <th><label for="categoria">Categoria</label></th>
-                                <th><select name="categoria">
+                                <th><select name="categoria" required="True">
                                         <option value="">Seleccionar</option>
                                         <c:forEach var="c" items="${categorias}">
                                             <option value="${c.idCategoria}">${c.descripcion}</option>
                                         </c:forEach>
                                     </select> 
                                 <th><label for="imagen">Imagen</label></th>
-                                <th><input class="form-control" type="file" name="imagen" onchange="cargarArchivo(this)"></th>
+                                <th><input class="form-control" type="file" name="imagen" onchange="cargarArchivo(this)" required="True"></th>
                             </tr>
                         </table>
                         <input type="hidden" name="nombreImagen" value="">
@@ -80,14 +80,17 @@
                                     <tr>
                                         <th>${ p.idProducto }</th>
                                         <th>${ p.nombre }</th>
-                                        <th><a href="Producto?op=modificar${p.idProducto}">Modificar</a><a href="Producto?op=eliminar${p.idProducto}">Eliminar</a></th>
+                                        <th>
+                                            <a href="Producto?op=modificar${p.idProducto}">Modificar</a>
+                                            <a href="Producto?op=eliminar${p.idProducto}">Eliminar</a>
+                                        </th>
                                     </tr>
                                 </c:forEach>
                             </c:otherwise>
                         </c:choose>
                     </table>
                     <br><br><br><br>
-                    <jsp:include page="footerMantenedor.jspf" />    
+                    <jsp:include page="../WEB-INF/jspf/footer.jspf" />
                 </main>
             </div> 
         </div>

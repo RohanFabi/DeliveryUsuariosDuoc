@@ -97,6 +97,11 @@ section {
   display: block;
 }
 
+#listaPedidos {
+    width: 95vw; 
+    margin-left: 2.5vw;
+}
+
 .center-block {
     text-align: center;
 }

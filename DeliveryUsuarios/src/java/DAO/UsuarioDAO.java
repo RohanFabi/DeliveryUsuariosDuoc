@@ -81,4 +81,21 @@ public class UsuarioDAO {
         }
         return u;
     }
+    
+    public int buscarPuntoVentaUsuario(int id) {
+        int idPunto=0;
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "Select u.puntoVenta.idPuntoVenta from Usuario u where u.idUsuario= :id";
+            Query q = sesion.createQuery(hql);
+            q.setParameter("id", id);
+
+            idPunto =(int)q.uniqueResult() ;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return idPunto;
+    }
 }

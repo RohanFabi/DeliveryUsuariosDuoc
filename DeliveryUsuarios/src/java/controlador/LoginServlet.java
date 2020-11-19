@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import modelo.PuntoVenta;
 import modelo.Usuario;
 
 /**
@@ -38,7 +39,7 @@ public class LoginServlet extends HttpServlet {
         //busco la info del login
         Usuario u = (Usuario) request.getSession().getAttribute("login");
         //Si un usuario logeado accede a esta página, es porque entro presionando el botón "Salir"
-        //entonces se limpia la sesion y se le redirecciona
+        //entonces se limpia la sesion, quitando el usuario y el tipo de usuario, y se le redirecciona
         if (u != null) {
             request.getSession().removeAttribute("login");
             response.sendRedirect("index");
@@ -58,16 +59,18 @@ public class LoginServlet extends HttpServlet {
         //busco si hay un login activo
         UsuarioDAO udao = new UsuarioDAO();
         Usuario usuario = udao.buscarUsuarioLogin(email, contrasena);
-        //si te devolvio algun usuario
-        if (usuario != null) {
+        if (usuario != null) { //si te devolvio algun usuario
             //si el usuario esta activo
             if (usuario.isActivo()) {
-                if (usuario.getTipoUsuario().getIdTipoUsuario() == 2) {
-                    request.getSession().setAttribute("tipo", "Administrador");
-                    request.getSession().setAttribute("login", usuario);
+                if (usuario.getTipoUsuario().getIdTipoUsuario() == 2) { //Punto de venta
+                    int idPuntoVenta = udao.buscarPuntoVentaUsuario(usuario.getIdUsuario());
+                    PuntoVenta pv = new PuntoVenta();
+                    pv.setIdPuntoVenta(idPuntoVenta);
+                    usuario.setPuntoVenta(pv);
+                    usuario.setContrasena("null");
+                    request.getSession().setAttribute("login", usuario); 
                     response.sendRedirect("Administracion");
-                } else if (usuario.getTipoUsuario().getIdTipoUsuario() == 3) {
-                    request.getSession().setAttribute("tipo", "Colaborador");
+                } else if (usuario.getTipoUsuario().getIdTipoUsuario() == 3) { //Colaborador o Cliente
                     request.getSession().setAttribute("login", usuario);
                     response.sendRedirect("index");
                 } else {
