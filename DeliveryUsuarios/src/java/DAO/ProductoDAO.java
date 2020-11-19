@@ -41,7 +41,7 @@ public class ProductoDAO {
         List<Producto> productos = null;
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
-            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :id";            
+            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :id order by p.idProducto DESC";            
             Query q = sesion.createQuery(hql);
             q.setParameter("id", idPuntoVenta);
             

@@ -56,17 +56,16 @@
                                 <c:if test="${p.categoria.idCategoria == cat.idCategoria}">
                                     <div class="col-lg-4 mb-5 mb-lg-0">
                                         <a class="card lift h-100" href="#!">
-
                                             <img class="card-img-top" src="Delivery/media/producto/${p.imagen}" alt="..." />
                                             <div class="card-body">
                                                 <h3 class="text-primary mb-0">${p.precio}</h3>
                                                 <div class="small text-gray-800 font-weight-500">${p.nombre}</div>
-                                                <div class="small text-gray-500">${t.nombre}</div>
                                             </div>
-                                            <div
-                                                class="card-footer bg-transparent border-top d-flex align-items-center justify-content-between">
-                                                <div class="small text-gray-500">Añadir</div>
-                                                <div class="small text-gray-500"><i data-feather="arrow-right"></i></div>
+                                            <div class="card-footer bg-transparent border-top d-flex align-items-center">
+                                                <form method="POST" action="PuntoVenta">
+                                                    <button type="submit" class="btn btn-light btn-block">Agregar</button>
+                                                    <input type="hidden" name="idProducto" id="idProducto" value="${p.idProducto}"/>
+                                                </form>
                                             </div>
                                         </a>
                                     </div>

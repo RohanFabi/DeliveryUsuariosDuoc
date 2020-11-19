@@ -52,22 +52,23 @@
                                     <div class="card-header py-3 ">
                                         <!-- Forma de envio -->
 
-                                        <div class=" form-row container ">
+                                        <div class="form-row container ">
                                             <c:if test="${msjErrorCarrito!=null}">
                                                 <div class="alert alert-danger">${msjErrorCarrito}</div>
                                             </c:if>
-                                            <div class="custom-control custom-radio  col-sm-8">
-                                                <input class="custom-control-input" type="radio" name="rbEntrega" value="1">
-                                                <label class="custom-control-label" for="rbEntrega">Retiro</label>
+                                             <div class="custom-control custom-radio  col-sm-8">
+                                                <input class="custom-control-input" id="customRadio1" type="radio"
+                                                       name="customRadio" value="1">
+                                                <label class="custom-control-label" for="customRadio1">Retiro</label>
                                             </div>
                                             <div class="custom-control custom-radio col-sm-8">
-                                                <input class="custom-control-input" type="radio" name="rbEntrega" value="2">
-                                                <label class="custom-control-label" for="rbEntrega">Despacho</label>
+                                                <input class="custom-control-input" id="customRadio2" type="radio"
+                                                       name="customRadio" value="2">
+                                                <label class="custom-control-label" for="customRadio2">Despacho</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="card-body">
-
                                         <!-- Torre y Piso -->
                                         <div class="form-row">
 
@@ -99,14 +100,12 @@
                                             <input class="form-control rounded-pill" id="detalleUbicacion" name="detalleUbicacion" type="text" />
                                         </div>
                                         <!--metodo pago-->
-                                        <div class=" form-row container ">
-                                            <div class="custom-control custom-radio  col-sm-8">
-                                                <input class="custom-control-input" type="radio" name="rbPago" value="1">
-                                                <label class="custom-control-label" for="rbPago">Efectivo</label>
+                                        <div class="form-row container">
+                                            <div class="radio  col-sm-12">
+                                               <label><input type="radio" name="rbPago" value="1">Efectivo</label>
                                             </div>
-                                            <div class="custom-control custom-radio col-sm-8">
-                                                <input class="custom-control-input" type="radio" name="rbPago" value="2">
-                                                <label class="custom-control-label" for="rbPago">Tarjeta</label>
+                                            <div class="radio col-sm-12">
+                                                <label><input type="radio" name="rbPago" value="2">Tarjeta</label>
                                             </div>
                                         </div>
                                         <!-- BOTON -->
@@ -133,31 +132,31 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:if test="${carrito == null}">
+                                        <c:if test="${msjCarrito!=null}">
                                             <tr>
                                                 <td colspan="6">
-                                                    <div class="text-gray-600">No hay productos en tu carrito</div>
+                                                    <div class="alert alert-dark text-center">${msjCarrito}</div>
                                                 </td>
                                             </tr>
-                                    </c:if>
-                                    <c:set var="contador" value="${1}" />
-                                    <c:forEach items="${carrito}" var="c">
-                                        <tr>
-                                            <th scope="row">${contador}</th>
-                                            <td><img src="Delivery/media/producto/${c.producto.imagen}" width="120" height="100"></td>
-                                            <td>${c.producto.nombre}</td>
-                                            <td>${c.cantidad}</td>
-                                            <td>${c.producto.precio}</td>
-                                            <td>${c.subtotal}</td>
-                                            <td>
-                                                <form method="POST" action="DetalleCompra">
-                                                    <input type="submit" value="Quitar" name="enviar" id="enviar"/>
-                                                    <input type="hidden" value="${c.producto.idProducto}" name="idProducto" id="idProducto"/>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                        <c:set var="contador" value="${contador + 1}" />
-                                    </c:forEach>
+                                        </c:if>
+                                        <c:set var="contador" value="${1}" />
+                                        <c:forEach items="${carrito}" var="c">
+                                            <tr>
+                                                <th scope="row">${contador}</th>
+                                                <td><img src="Delivery/media/producto/${c.producto.imagen}" width="120" height="100"></td>
+                                                <td>${c.producto.nombre}</td>
+                                                <td>${c.cantidad}</td>
+                                                <td>${c.producto.precio}</td>
+                                                <td>${c.subtotal}</td>
+                                                <td>
+                                                    <form method="POST" action="DetalleCompra">
+                                                        <input type="submit" value="Quitar" name="enviar" id="enviar"/>
+                                                        <input type="hidden" value="${c.producto.idProducto}" name="idProducto" id="idProducto"/>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <c:set var="contador" value="${contador + 1}" />
+                                        </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
