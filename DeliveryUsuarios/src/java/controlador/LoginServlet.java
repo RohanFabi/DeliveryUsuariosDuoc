@@ -89,11 +89,9 @@ public class LoginServlet extends HttpServlet {
             //si el usuario esta activo
             if (usuario.isActivo()) {
                 if (usuario.getTipoUsuario().getIdTipoUsuario() == 2) {
-                    request.getSession().setAttribute("tipo", "Administrador");
                     request.getSession().setAttribute("login", usuario);
                     response.sendRedirect("Administracion");
                 } else if (usuario.getTipoUsuario().getIdTipoUsuario() == 3) {
-                    request.getSession().setAttribute("tipo", "Colaborador");
                     request.getSession().setAttribute("login", usuario);
                     response.sendRedirect("index");
                 } else {

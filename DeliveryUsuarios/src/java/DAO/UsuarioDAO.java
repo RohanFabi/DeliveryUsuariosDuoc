@@ -15,15 +15,15 @@ import org.hibernate.Transaction;
  * @author dream
  */
 public class UsuarioDAO {
-    
+
     public Usuario buscarUsuarioRut(String rut) {
-        Usuario u=new Usuario();
+        Usuario u = new Usuario();
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
-            String hql = "from Usuario u where u.rut= :rut";            
+            String hql = "from Usuario u where u.rut= :rut";
             Query q = sesion.createQuery(hql);
             q.setParameter("rut", rut);
-            
+
             u = (Usuario) q.uniqueResult();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -32,15 +32,15 @@ public class UsuarioDAO {
         }
         return u;
     }
-    
+
     public Usuario buscarUsuarioEmail(String email) {
-        Usuario u=new Usuario();
+        Usuario u = new Usuario();
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
-            String hql = "from Usuario u where u.email= :email";            
+            String hql = "from Usuario u where u.email= :email";
             Query q = sesion.createQuery(hql);
             q.setParameter("email", email);
-            
+
             u = (Usuario) q.uniqueResult();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -49,6 +49,7 @@ public class UsuarioDAO {
         }
         return u;
     }
+
     public int guardar(Usuario u) {
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         int id = 0;
@@ -63,16 +64,16 @@ public class UsuarioDAO {
         }
         return id;
     }
-    
+
     public Usuario buscarUsuarioLogin(String email, String contrasena) {
-        Usuario u=new Usuario();
+        Usuario u = new Usuario();
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
-            String hql = "from Usuario u where u.email= :email and u.contrasena= :contrasena";            
+            String hql = "from Usuario u where u.email= :email and u.contrasena= :contrasena";
             Query q = sesion.createQuery(hql);
             q.setParameter("email", email);
             q.setParameter("contrasena", contrasena);
-            
+
             u = (Usuario) q.uniqueResult();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -80,5 +81,22 @@ public class UsuarioDAO {
             sesion.close();
         }
         return u;
+    }
+
+    public int buscarPuntoVentaUsuario(int id) {
+        int idPunto = 0;
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "Select u.puntoVenta.idPuntoVenta from Usuario u where u.idUsuario= :id";
+            Query q = sesion.createQuery(hql);
+            q.setParameter("id", id);
+
+            idPunto = (int) q.uniqueResult();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return idPunto;
     }
 }

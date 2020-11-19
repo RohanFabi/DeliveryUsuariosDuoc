@@ -23,6 +23,7 @@ import javax.servlet.http.Part;
 import modelo.Categoria;
 import modelo.Producto;
 import modelo.PuntoVenta;
+import modelo.Usuario;
 
 /**
  *
@@ -65,6 +66,25 @@ public class ProductoServlet extends HttpServlet {
         HttpSession session = request.getSession();
         //busco la operacion que viene en la url "Producto?op=..."
         String operacion = request.getParameter("op");
+        
+        //Si al acceder por url a gestionar productos, el usuario no es punto de venta, se le debe redirigir al indice.
+        Usuario u = (Usuario) session.getAttribute("login");
+        int id = 0; //Inicialización de la variable a un valor por defecto.
+        //Que intente acceder al metodo getIdTipoUsuario() de la clase TipoUsuario, para asignar el resultado a id. 
+        //Si falla, que rediriga al indice.
+        try{ 
+            id = u.getTipoUsuario().getIdTipoUsuario();
+        }catch(Exception e){
+            request.getRequestDispatcher("index.jsp").forward(request,response);
+        }
+        if(id != 2){ //Si el usuario no es un Punto de Venta, también redirige al indice:
+            request.getRequestDispatcher("index.jsp").forward(request,response);
+        }
+        //Se buscan las categorias de prodyctos y se guardan en una lista
+        List<Categoria> categorias = objP.listarCategorias();
+        //luego se guardan en un atributo para la pagina
+        session.setAttribute("categorias", categorias);
+        
         //si la operacion existe en la url
         if (operacion != null) {
             //busco la ultima r en el valor
@@ -73,16 +93,7 @@ public class ProductoServlet extends HttpServlet {
             String op = operacion.substring(0, i + 1);
             //accion a tomar dependiendo del valor
             switch (op) {
-
-                case "crear":
-                    //si el valor es crear, por crear un nuevo producto
-                    //busco las categorias y las guardo en una lista
-                    List<Categoria> categorias = objP.listarCategorias();
-                    //las guardo en un atributo para la pagina
-                    session.setAttribute("categorias", categorias);
-                    //redirecciono a la pagina
-                    request.getRequestDispatcher("Mantenedor/CrearProducto.jsp").forward(request, response);
-                    break;
+                
                 case "modificar":
                     //si el valor es modificar 
                     //entra a metodo modificar con ctrl+click en el nombre te lleva al metodo
@@ -91,7 +102,6 @@ public class ProductoServlet extends HttpServlet {
                     //si el valor es eliminar te lleva al metodo
                     eliminar(request, response);
                     break;
-                case "ver":
                 default:
                     //esto enrealidad jamas deberia pasar pero porsiacaso
                     List<Producto> productos = objP.listarProductos();
@@ -144,7 +154,7 @@ public class ProductoServlet extends HttpServlet {
     }// </editor-fold>
 
     private void eliminar(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     private void verModificar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -206,7 +216,7 @@ public class ProductoServlet extends HttpServlet {
         //id del producto = guardar producto en la bd
         int id = objP.guardar(new Producto(cat, punto, nombre, precio, imagen, true));
         //redirecciono a la pagina
-        request.getRequestDispatcher("Mantenedor/CrearProducto.jsp").forward(request, response);
+        request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
     }
 
     private void modificarProducto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
