@@ -259,6 +259,8 @@ public class DetalleCompraServlet extends HttpServlet {
                 //redirecciona a pagina
                 request.getRequestDispatcher("Delivery/detalle_compra.jsp").forward(request, response);
             } else {
+                //elimino el carrito pork esta vacio
+                request.getSession().removeAttribute("carrito");
                 //seteo un mensaje
                 request.getSession().setAttribute("msjCarrito", "Pedido enviado con exito, \n"
                         + " el numero de su pedido es " + idPedido);
