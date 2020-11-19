@@ -31,7 +31,7 @@
                     <br><br>
                     <h2 align="center">Modificar Producto</h2>
                     <br><br>
-                    <form method="POST" enctype="multipart/form-data">
+                    <form method="POST" enctype="multipart/form-data" name="guardarProducto" action="Producto">
                         <table align="center" >                            
                             <tr>
                                 <th><label for="nombre">Nombre</label></th>
