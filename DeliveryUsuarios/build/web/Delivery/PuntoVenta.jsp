@@ -20,6 +20,7 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.24.1/feather.min.js" crossorigin="anonymous">
         </script>
+        <script src="js/alertas.js" type="text/javascript"></script>
     </head>
     <body>
         <div id="layoutDefault">
@@ -62,8 +63,10 @@
                                                 <div class="small text-gray-800 font-weight-500">${p.nombre}</div>
                                             </div>
                                             <div class="card-footer bg-transparent border-top d-flex align-items-center">
-                                                <form method="POST" action="PuntoVenta">
-                                                    <button type="submit" class="btn btn-light btn-block">Agregar</button>
+                                                <form method="POST" action="PuntoVenta" name="formularioAgregarCarrito">
+                                                    <button  class="btn btn-light btn-block" <c:if test="${esOtroPunto==0}">type="submit"</c:if>
+                                                        <c:if test="${esOtroPunto==1}">type="button" onclick="confirmarCambioCarrito()"</c:if>
+                                                        <c:if test="${login==null}">disabled</c:if>>Agregar</button>
                                                     <input type="hidden" name="idProducto" id="idProducto" value="${p.idProducto}"/>
                                                 </form>
                                             </div>

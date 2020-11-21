@@ -86,6 +86,30 @@ public class PuntoVentaServlet extends HttpServlet {
         List<Categoria> categorias = pdao.listarCategoriasPunto(pv.getIdPuntoVenta());
         //los guardo en un atributo de sesion para mostrarlos
         request.getSession().setAttribute("categorias", categorias);
+        //para validacion de carrito por punto venta
+        //busco el carrito
+        List<DetallePedido> carrito = (List<DetallePedido>) request.getSession().getAttribute("carrito");
+        //si el carrito existe
+        if (carrito != null) {
+            //busco un detalle y guardo el id de tienda
+            int idTienda = 0;
+            for (int indice = 0; indice < 1; indice++) {
+                DetallePedido dp = carrito.get(indice);
+                idTienda = dp.getProducto().getPuntoVenta().getIdPuntoVenta();
+            }
+            //si el punto de venta es el mismo del carrito
+            if (idTienda == pv.getIdPuntoVenta()) {
+                request.getSession().setAttribute("esOtroPunto", 0);
+            } else {
+                //si el punto de venta no es el mismo del carrito
+                request.getSession().setAttribute("esOtroPunto", 1);
+            }
+
+        } else {
+            //el punto de venta no puede ser otro que el del carrito
+            request.getSession().setAttribute("esOtroPunto", 0);
+        }
+
         //redirecciono a pagina
         request.getRequestDispatcher("Delivery/PuntoVenta.jsp").forward(request, response);
 
@@ -114,7 +138,16 @@ public class PuntoVentaServlet extends HttpServlet {
         //busco el carrito si ya existia
         List<DetallePedido> carrito = (List<DetallePedido>) request.getSession().getAttribute("carrito");
         if (carrito == null) {
-            carrito=new ArrayList<DetallePedido>();
+            carrito = new ArrayList<DetallePedido>();
+        }else{
+            //reviso si confirmo cambiar el carrito
+            int esOtroPunto=(int)request.getSession().getAttribute("esOtroPunto");
+            if (esOtroPunto==1) {
+                //remuevo el carrito si confirmo
+                request.getSession().removeAttribute("carrito");
+                carrito.clear();
+                request.getSession().setAttribute("esOtroPunto", 0);
+            }
         }
         //agrego el detalle al carrito
         carrito.add(dp);
