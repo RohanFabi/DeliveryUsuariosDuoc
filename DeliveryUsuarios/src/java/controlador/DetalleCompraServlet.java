@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -133,13 +134,18 @@ public class DetalleCompraServlet extends HttpServlet {
                             //busco el id del producto a quitar
                             int idProducto = Integer.parseInt(request.getParameter("idProducto"));
                             //busco el carrito
-                            List<DetallePedido> carrito = (List<DetallePedido>) request.getSession().getAttribute("carrito");
-                            //busco el producto en el carrito
-                            for (DetallePedido pedido : carrito) {
-                                if (pedido.getProducto().getIdProducto() == idProducto) {
-                                    //lo elimina del carrito
-                                    carrito.remove(pedido);
-                                }
+                            List<DetallePedido> listacarrito = (List<DetallePedido>) request.getSession().getAttribute("carrito");
+                            //funcion que remueve si se da la coincidencia
+                            listacarrito.removeIf(lc -> idProducto==lc.getProducto().getIdProducto());
+
+                            //si el carrito esta vacio
+                            if (listacarrito.isEmpty()) {
+                                // lo elimino
+                                request.getSession().removeAttribute("carrito");
+                            }else{
+                                // si no sobreescribo el carrito
+                                request.getSession().setAttribute("carrito", listacarrito);
+                                
                             }
                             response.sendRedirect("DetalleCompra");
                             break;
@@ -237,8 +243,8 @@ public class DetalleCompraServlet extends HttpServlet {
             //busco el carrito
             List<DetallePedido> carrit = (List<DetallePedido>) request.getSession().getAttribute("carrito");
 
-            int largoCarrito=carrit.size();
-            int contador=0;
+            int largoCarrito = carrit.size();
+            int contador = 0;
             for (DetallePedido detallePedido : carrit) {
                 detallePedido.setPedido(pedido);
                 int idDetalle = pedidodao.guardarDetallePedido(detallePedido);
@@ -246,7 +252,7 @@ public class DetalleCompraServlet extends HttpServlet {
                     contador++;
                 }
             }
-            if (contador==largoCarrito) {
+            if (contador == largoCarrito) {
                 carrit.clear();
             }
             //si el carrito no se guardo completo
