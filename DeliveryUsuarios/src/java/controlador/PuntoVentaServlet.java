@@ -60,8 +60,24 @@ public class PuntoVentaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        //busco el punto de venta seleccionado
-        String punto = request.getParameter("pv");
+        //busco el parametro del punto de venta seleccionado
+        String parametro = request.getParameter("pv");
+        //reviso si es que viene un guion
+        int posicionGuion = parametro.indexOf("-");
+        //instancio el punto para que no de null pointer exception
+        String punto = "";
+        //instancio categoria
+        String nombreCategoria = "";
+        //si no existe el guión
+        if (posicionGuion == -1) {
+            // no hay categoria y el punto de venta viene solo en el parametro
+            punto = parametro;
+        } else {
+            //rescatar punto venta
+            punto = parametro.substring(0, posicionGuion);
+            //rescatar categoria
+            nombreCategoria = parametro.substring(posicionGuion + 1);
+        }
         //instancio el id de la sede
         int idSede;
         //busco si existe un login
@@ -78,14 +94,32 @@ public class PuntoVentaServlet extends HttpServlet {
         PuntoVenta pv = pvdao.buscarNombreSede(punto, idSede);
         //lo guardo en un atributo de sesion para mostrarlo
         request.getSession().setAttribute("puntoventa", pv);
-        //busco los productos de ese punto
-        List<Producto> productos = pdao.listarProductoIdTienda(pv.getIdPuntoVenta());
-        //los guardo en un atributo de sesion para mostrarlos
-        request.getSession().setAttribute("productos", productos);
         //busco las Categorias
         List<Categoria> categorias = pdao.listarCategoriasPunto(pv.getIdPuntoVenta());
         //los guardo en un atributo de sesion para mostrarlos
         request.getSession().setAttribute("categorias", categorias);
+        //si no hay categoria guardada
+        if (nombreCategoria.equals("")) {
+            //busco los productos de ese punto
+            List<Producto> productos = pdao.listarProductoIdTienda(pv.getIdPuntoVenta());
+            //los guardo en un atributo de sesion para mostrarlos
+            request.getSession().setAttribute("productos", productos);
+            //variable para categorias por producto en sesion
+            request.getSession().setAttribute("categoriasProducto", categorias);
+        } else {
+            //si hay categoria
+            //busco la categoria
+            Categoria categoria=pdao.buscarCategoriabyDescripcion(nombreCategoria);
+            //busco los productos del punto con la categoria pedida
+            List<Producto> productos = pdao.listarProductosbyTiendaCategoria(pv.getIdPuntoVenta(), categoria.getIdCategoria());
+            //los guardo en un atributo de sesion para mostrarlos
+            request.getSession().setAttribute("productos", productos);
+            //lista de categorias para que solo contenga la seleccionada
+            List<Categoria> categoriaSeleccionada=new ArrayList<>();
+            categoriaSeleccionada.add(categoria);
+            //variable para categorias por producto en sesion
+            request.getSession().setAttribute("categoriasProducto", categoriaSeleccionada);
+        }
         //para validacion de carrito por punto venta
         //busco el carrito
         List<DetallePedido> carrito = (List<DetallePedido>) request.getSession().getAttribute("carrito");
@@ -136,23 +170,23 @@ public class PuntoVentaServlet extends HttpServlet {
         //armo el detalle pedido
         DetallePedido dp = new DetallePedido(pedido, producto, 1, producto.getPrecio());
         //instancio contador para boton de carrito
-        int contCarrito=0;
+        int contCarrito = 0;
         //busco el carrito si ya existia
         List<DetallePedido> carrito = (List<DetallePedido>) request.getSession().getAttribute("carrito");
         //si el carrito no existia
         if (carrito == null) {
             carrito = new ArrayList<DetallePedido>();
-        }else{
+        } else {
             //reviso si confirmo cambiar el carrito de tienda
-            int esOtroPunto=(int)request.getSession().getAttribute("esOtroPunto");
-            if (esOtroPunto==1) {
+            int esOtroPunto = (int) request.getSession().getAttribute("esOtroPunto");
+            if (esOtroPunto == 1) {
                 //remuevo el carrito si confirmo
                 request.getSession().removeAttribute("carrito");
                 carrito.clear();
                 request.getSession().setAttribute("esOtroPunto", 0);
-            }else{
+            } else {
                 //si no hubo cambio de tienda asigno el valor contador existente
-                contCarrito=(int)request.getSession().getAttribute("contadorCarrito");
+                contCarrito = (int) request.getSession().getAttribute("contadorCarrito");
             }
         }
         //agrego el detalle al carrito y actualizo el contador

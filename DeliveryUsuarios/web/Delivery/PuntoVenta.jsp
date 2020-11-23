@@ -37,7 +37,7 @@
                                 aria-haspopup="true" aria-expanded="false">Categorias</button>
                         <div class="dropdown-menu animated--fade-in-up">
                             <c:forEach items="${categorias}" var="c">
-                                <a class="dropdown-item" href="#!">${c.descripcion}</a>
+                                <a class="dropdown-item" href="PuntoVenta?pv=${puntoventa.nombre}-${c.descripcion}">${c.descripcion}</a>
                             </c:forEach>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                            placeholder="Busca tu pedido!" />
                 </div>
             </div>
-            <c:forEach items="${categorias}" var="cat">
+            <c:forEach items="${categoriasProducto}" var="cat">
                 <section class="bg-white py-5 ">
                     <div class="container">
                         <div class="d-flex align-items-center justify-content-between mb-4">
