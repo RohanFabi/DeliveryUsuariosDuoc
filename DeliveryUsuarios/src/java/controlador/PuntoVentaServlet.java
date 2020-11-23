@@ -135,24 +135,33 @@ public class PuntoVentaServlet extends HttpServlet {
         Pedido pedido = new Pedido();
         //armo el detalle pedido
         DetallePedido dp = new DetallePedido(pedido, producto, 1, producto.getPrecio());
+        //instancio contador para boton de carrito
+        int contCarrito=0;
         //busco el carrito si ya existia
         List<DetallePedido> carrito = (List<DetallePedido>) request.getSession().getAttribute("carrito");
+        //si el carrito no existia
         if (carrito == null) {
             carrito = new ArrayList<DetallePedido>();
         }else{
-            //reviso si confirmo cambiar el carrito
+            //reviso si confirmo cambiar el carrito de tienda
             int esOtroPunto=(int)request.getSession().getAttribute("esOtroPunto");
             if (esOtroPunto==1) {
                 //remuevo el carrito si confirmo
                 request.getSession().removeAttribute("carrito");
                 carrito.clear();
                 request.getSession().setAttribute("esOtroPunto", 0);
+            }else{
+                //si no hubo cambio de tienda asigno el valor contador existente
+                contCarrito=(int)request.getSession().getAttribute("contadorCarrito");
             }
         }
-        //agrego el detalle al carrito
+        //agrego el detalle al carrito y actualizo el contador
         carrito.add(dp);
+        contCarrito++;
         //agrego el carrito a la session o sobreescribo
         request.getSession().setAttribute("carrito", carrito);
+        //agrego el contador a la session
+        request.getSession().setAttribute("contadorCarrito", contCarrito);
         //busco en que tienda estaba
         PuntoVenta pv = (PuntoVenta) request.getSession().getAttribute("puntoventa");
         response.sendRedirect("PuntoVenta?pv=" + pv.getNombre());

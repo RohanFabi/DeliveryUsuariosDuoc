@@ -77,8 +77,9 @@ public class DetalleCompraServlet extends HttpServlet {
                 String op = request.getParameter("op");
                 if (op != null) {
                     //si la opcion no esta vacia es cancelar
-                    //limpio el carrito
+                    //limpio el carrito y su contador
                     request.getSession().removeAttribute("carrito");
+                    request.getSession().removeAttribute("contadorCarrito");
                 }
                 //buscar la sede del usuario
                 int sede = u.getSede().getIdSede();
@@ -140,12 +141,16 @@ public class DetalleCompraServlet extends HttpServlet {
 
                             //si el carrito esta vacio
                             if (listacarrito.isEmpty()) {
-                                // lo elimino
+                                // lo elimino de la sesion con el contador
                                 request.getSession().removeAttribute("carrito");
+                                request.getSession().removeAttribute("contadorCarrito");
                             }else{
                                 // si no sobreescribo el carrito
                                 request.getSession().setAttribute("carrito", listacarrito);
-                                
+                                //busco el contador, lo modifico y sobreescribo
+                                int contador=(int)request.getSession().getAttribute("contadorCarrito");
+                                contador--;
+                                request.getSession().setAttribute("contadorCarrito",contador);
                             }
                             response.sendRedirect("DetalleCompra");
                             break;
