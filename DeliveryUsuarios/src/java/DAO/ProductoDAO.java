@@ -169,4 +169,23 @@ public class ProductoDAO {
         }
         return categoria;
     }
+    
+    public List<Producto> listarProductosbyBusquedaTienda(String textoBusqueda, int idPuntoVenta) {
+        List<Producto> productos = null;
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "from Producto p where p.nombre LIKE :textoBusqueda and"
+                    + " p.puntoVenta.idPuntoVenta= :idPuntoVenta order by p.idProducto DESC";            
+            Query q = sesion.createQuery(hql);
+            q.setParameter("idPuntoVenta", idPuntoVenta);
+            q.setParameter("textoBusqueda", "%"+textoBusqueda+"%");
+            
+            productos = q.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return productos;
+    }
 }

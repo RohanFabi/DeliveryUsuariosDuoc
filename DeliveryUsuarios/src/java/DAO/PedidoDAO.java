@@ -43,4 +43,18 @@ public class PedidoDAO {
         }
         return id;
     }
+    
+    public void modificarPedido(Pedido p) {
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        
+        try {
+            Transaction tx = sesion.beginTransaction();
+            sesion.update(p);
+            tx.commit();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+    } 
 }

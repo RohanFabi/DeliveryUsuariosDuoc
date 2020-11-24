@@ -58,7 +58,7 @@ public class LoginServlet extends HttpServlet {
         //si hay un usuario logeado es porque entre con el boton salir
         //entonces limpio la sesion y redirecciono
         if (u != null) {
-            request.getSession().removeAttribute("login");
+            request.getSession().invalidate();
             response.sendRedirect("index");
         } else {
             //redirecciono

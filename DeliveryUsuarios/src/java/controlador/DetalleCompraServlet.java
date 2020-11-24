@@ -137,20 +137,20 @@ public class DetalleCompraServlet extends HttpServlet {
                             //busco el carrito
                             List<DetallePedido> listacarrito = (List<DetallePedido>) request.getSession().getAttribute("carrito");
                             //funcion que remueve si se da la coincidencia
-                            listacarrito.removeIf(lc -> idProducto==lc.getProducto().getIdProducto());
+                            listacarrito.removeIf(lc -> idProducto == lc.getProducto().getIdProducto());
 
                             //si el carrito esta vacio
                             if (listacarrito.isEmpty()) {
                                 // lo elimino de la sesion con el contador
                                 request.getSession().removeAttribute("carrito");
                                 request.getSession().removeAttribute("contadorCarrito");
-                            }else{
+                            } else {
                                 // si no sobreescribo el carrito
                                 request.getSession().setAttribute("carrito", listacarrito);
                                 //busco el contador, lo modifico y sobreescribo
-                                int contador=(int)request.getSession().getAttribute("contadorCarrito");
+                                int contador = (int) request.getSession().getAttribute("contadorCarrito");
                                 contador--;
-                                request.getSession().setAttribute("contadorCarrito",contador);
+                                request.getSession().setAttribute("contadorCarrito", contador);
                             }
                             response.sendRedirect("DetalleCompra");
                             break;
@@ -184,6 +184,8 @@ public class DetalleCompraServlet extends HttpServlet {
     }// </editor-fold>
 
     private void ordenar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //borrar mensajes
+        request.getSession().removeAttribute("msjErrorCarrito");
         //busco el medio de entrega
         String tipoe = request.getParameter("customRadio");
         TipoEntrega tipoEntrega = new TipoEntrega();
@@ -197,26 +199,29 @@ public class DetalleCompraServlet extends HttpServlet {
             //seteo un mensaje y redirecciono
             request.getSession().setAttribute("msjErrorCarrito", "Debe escojer un metodo de entrega");
             request.getRequestDispatcher("Delivery/detalle_compra.jsp").forward(request, response);
+            return;
         }
         Ubicacion ubicacion = new Ubicacion();
         //busco la ubicacion
         String ubi = request.getParameter("cboUbicacion");
         //si hay una ubicacion escojida
-        if (ubi != null) {
+        if (ubi.isEmpty()) {
+            //seteo un mensaje y redirecciono
+            request.getSession().setAttribute("msjErrorCarrito", "Debe escojer una ubicacion");
+            request.getRequestDispatcher("Delivery/detalle_compra.jsp").forward(request, response);
+            return;
+        } else {
             //praseo para usar
             int idUbicacion = Integer.parseInt(ubi);
 
             ubicacion.setIdUbicacion(idUbicacion);
-        } else {
-            //seteo un mensaje y redirecciono
-            request.getSession().setAttribute("msjErrorCarrito", "Debe escojer una ubicacion");
-            request.getRequestDispatcher("Delivery/detalle_compra.jsp").forward(request, response);
         }
         //busco el detalleUbicacion
         String detalleUbicacion = request.getParameter("detalleUbicacion");
         if (detalleUbicacion == null || detalleUbicacion.equals("")) {
             request.getSession().setAttribute("msjErrorCarrito", "Debe anotar la sala, oficina o cualquier otro dato de utilidad");
             request.getRequestDispatcher("Delivery/detalle_compra.jsp").forward(request, response);
+            return;
         }
         //set metodo pago
         MetodoPago metodoPago = new MetodoPago();
@@ -229,8 +234,9 @@ public class DetalleCompraServlet extends HttpServlet {
             metodoPago.setIdMetodo(idMetodoPago);
         } else {
             //seteo un mensaje y redirecciono
-            request.getSession().setAttribute("msjErrorCarrito", "Debe escojer un metodo de entrega");
+            request.getSession().setAttribute("msjErrorCarrito", "Debe escojer un metodo de pago");
             request.getRequestDispatcher("Delivery/detalle_compra.jsp").forward(request, response);
+            return;
         }
         Estado estado = new Estado();
         estado.setIdEstado(1);
@@ -247,21 +253,39 @@ public class DetalleCompraServlet extends HttpServlet {
             pedido.setIdPedido(idPedido);
             //busco el carrito
             List<DetallePedido> carrit = (List<DetallePedido>) request.getSession().getAttribute("carrito");
-
+            //mido el carrito
             int largoCarrito = carrit.size();
+            //contador para comparar registros guardados
             int contador = 0;
+            //variable del total
+            int total = 0;
+            //recorro el carrito
             for (DetallePedido detallePedido : carrit) {
+                //seteo el pedido en el detalle
                 detallePedido.setPedido(pedido);
+                //guardo el id del detalle resultante de la insercion en base de datos
                 int idDetalle = pedidodao.guardarDetallePedido(detallePedido);
+                //si hay una insercion
                 if (idDetalle > 0) {
+                    //actualizo contador y total
                     contador++;
+                    total = total + detallePedido.getSubtotal();
                 }
+            }
+            //si el contador fue actualizado
+            if (total > 0) {
+                //le ingreso el total al pedido
+                pedido.setTotal(total);
+                //guardo la modificacion en bd
+                pedidodao.modificarPedido(pedido);
             }
             if (contador == largoCarrito) {
                 carrit.clear();
             }
             //si el carrito no se guardo completo
             if (carrit.size() > 0) {
+                //actualizo el contador del carrito
+                request.getSession().setAttribute("contadorCarrito", carrit.size());
                 //guardo el carrito como esta en la sesion
                 request.getSession().setAttribute("carrito", carrit);
                 //seteo un mensaje
@@ -270,6 +294,8 @@ public class DetalleCompraServlet extends HttpServlet {
                 //redirecciona a pagina
                 request.getRequestDispatcher("Delivery/detalle_compra.jsp").forward(request, response);
             } else {
+                //elimino el contador del carrito
+                request.getSession().removeAttribute("contadorCarrito");
                 //elimino el carrito pork esta vacio
                 request.getSession().removeAttribute("carrito");
                 //seteo un mensaje

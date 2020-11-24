@@ -56,7 +56,7 @@
                                             <c:if test="${msjErrorCarrito!=null}">
                                                 <div class="alert alert-danger">${msjErrorCarrito}</div>
                                             </c:if>
-                                             <div class="custom-control custom-radio  col-sm-8">
+                                            <div class="custom-control custom-radio  col-sm-8">
                                                 <input class="custom-control-input" id="customRadio1" type="radio"
                                                        name="customRadio" value="1">
                                                 <label class="custom-control-label" for="customRadio1">Retiro</label>
@@ -76,7 +76,7 @@
                                                 <!-- Ubicaciones -->
                                                 <label for="cboUbicacion">Ubicacion</label>
                                                 <select class="form-control" id="cboUbicacion" name="cboUbicacion">
-                                                    <option>Selecciona</option>
+                                                    <option value="">Selecciona</option>
                                                     <c:forEach var="ub" items="${ubicaciones}">
                                                         <option value="${ub.idUbicacion}">${ub.nombreEdificio} piso:${ub.piso}</option>
                                                     </c:forEach>
@@ -102,7 +102,7 @@
                                         <!--metodo pago-->
                                         <div class="form-row container">
                                             <div class="radio  col-sm-12">
-                                               <label><input type="radio" name="rbPago" value="1">Efectivo</label>
+                                                <label><input type="radio" name="rbPago" value="1">Efectivo</label>
                                             </div>
                                             <div class="radio col-sm-12">
                                                 <label><input type="radio" name="rbPago" value="2">Tarjeta</label>
@@ -123,12 +123,13 @@
 
                                     <thead class="thead-dark">
                                         <tr>
+                                            <th scope="col">n°</th>
+                                            <th scope="col"></th>
                                             <th scope="col">Producto</th>
-                                            <th scope="col">Nombre</th>
                                             <th scope="col">Cantidad</th>
                                             <th scope="col">Precio</th>
                                             <th scope="col">Subtotal</th>
-                                            <th></th>
+                                            <th scope="col"></th>
                                         </tr>
                                     </thead>
                                     <tbody>

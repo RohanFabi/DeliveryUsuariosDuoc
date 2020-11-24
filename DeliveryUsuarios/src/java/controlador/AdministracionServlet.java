@@ -48,6 +48,9 @@ public class AdministracionServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        //le dice que se recargue cada 30 segundos
+        response.setIntHeader("Administracion", 5);
+        //busco los pedidos registrados pedientes
         //redireciona a pagina
         request.getRequestDispatcher("Mantenedor/InicioAdministracion.jsp").forward(request, response);
     }
