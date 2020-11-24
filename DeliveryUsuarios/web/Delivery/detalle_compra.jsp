@@ -4,6 +4,7 @@
     Author     : dream
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -37,7 +38,7 @@
                             <div class="card mb-2">
                                 <div class="list-group list-group-flush small">
                                     <!-- TODOS -->
-                                    <a class="list-group-item list-group-item-action " href="#!"><i
+                                    <a class="list-group-item list-group-item-action " href="DetalleCompra?op=Cancelar"><i
                                             class="fas fa-times-circle fa-fw mr-2 text-gray-400"></i>Cancelar
                                     </a>
 
@@ -47,65 +48,72 @@
 
                             <!-- forma de  envio -->
                             <div class="card rounded-lg text-dark ">
-                                <div class="card-header py-3 ">
-                                    <!-- Forma de envio -->
+                                <form method="POST" action="DetalleCompra">
+                                    <div class="card-header py-3 ">
+                                        <!-- Forma de envio -->
 
-                                    <div class=" form-row container ">
-
-                                        <div class="custom-control custom-radio  col-sm-8">
-                                            <input class="custom-control-input" id="customRadio1" type="radio"
-                                                   name="customRadio">
-                                            <label class="custom-control-label" for="customRadio1">Retiro</label>
-                                        </div>
-                                        <div class="custom-control custom-radio col-sm-8">
-                                            <input class="custom-control-input" id="customRadio2" type="radio"
-                                                   name="customRadio">
-                                            <label class="custom-control-label" for="customRadio2">Depacho</label>
+                                        <div class="form-row container ">
+                                            <c:if test="${msjErrorCarrito!=null}">
+                                                <div class="alert alert-danger">${msjErrorCarrito}</div>
+                                            </c:if>
+                                             <div class="custom-control custom-radio  col-sm-8">
+                                                <input class="custom-control-input" id="customRadio1" type="radio"
+                                                       name="customRadio" value="1">
+                                                <label class="custom-control-label" for="customRadio1">Retiro</label>
+                                            </div>
+                                            <div class="custom-control custom-radio col-sm-8">
+                                                <input class="custom-control-input" id="customRadio2" type="radio"
+                                                       name="customRadio" value="2">
+                                                <label class="custom-control-label" for="customRadio2">Despacho</label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card-body">
-                                    <form>
+                                    <div class="card-body">
                                         <!-- Torre y Piso -->
                                         <div class="form-row">
 
-                                            <div class="form-group col-md-6">
-                                                <!-- Sede -->
-                                                <label for="torre">Torre</label><select class="form-control"
-                                                                                        id="torre">
+                                            <div class="form-group col-md-12">
+                                                <!-- Ubicaciones -->
+                                                <label for="cboUbicacion">Ubicacion</label>
+                                                <select class="form-control" id="cboUbicacion" name="cboUbicacion">
                                                     <option>Selecciona</option>
-                                                    <option>A</option>
-                                                    <option>B</option>
-
+                                                    <c:forEach var="ub" items="${ubicaciones}">
+                                                        <option value="${ub.idUbicacion}">${ub.nombreEdificio} piso:${ub.piso}</option>
+                                                    </c:forEach>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <!-- piso -->
-                                                <label for="piso">Piso</label><select class="form-control"
+                                                <!--<label for="piso">Piso</label><select class="form-control"
                                                                                       id="piso">
                                                     <option>Selecciona</option>
                                                     <option>1</option>
                                                     <option>2</option>
 
-                                                </select>
+                                                </select>-->
                                             </div>
                                         </div>
 
                                         <!-- Sala o ubicación -->
-                                        <div class="form-group"><label class="small text-gray-600"
-                                                                       for="leadCapEmail">Sala/Ubicación
-                                            </label><input class="form-control rounded-pill" id="leadCapEmail"
-                                                           type="email" /></div>
-
-
-
-
-
+                                        <div class="form-group">
+                                            <label class="small text-gray-600" for="detalleUbicacion">Sala/Ubicación</label>
+                                            <input class="form-control rounded-pill" id="detalleUbicacion" name="detalleUbicacion" type="text" />
+                                        </div>
+                                        <!--metodo pago-->
+                                        <div class="form-row container">
+                                            <div class="radio  col-sm-12">
+                                               <label><input type="radio" name="rbPago" value="1">Efectivo</label>
+                                            </div>
+                                            <div class="radio col-sm-12">
+                                                <label><input type="radio" name="rbPago" value="2">Tarjeta</label>
+                                            </div>
+                                        </div>
                                         <!-- BOTON -->
-                                        <button class="btn btn-primary btn-marketing btn-block rounded-pill mt-4"
-                                                type="submit">Ordenar!</button>
-                                    </form>
-                                </div>
+                                        <input class="btn btn-primary btn-marketing btn-block rounded-pill mt-4"
+                                               type="submit" value="Ordenar" name="enviar" id="enviar"/>
+
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <!-- SECCION DERECHA - DE CASOS -->
@@ -115,60 +123,43 @@
 
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th scope="col">#</th>
                                             <th scope="col">Producto</th>
-                                            <th scope="col">Total</th>
-                                            <th scope="col">Subtotal</th>
+                                            <th scope="col">Nombre</th>
                                             <th scope="col">Cantidad</th>
-
-
-
+                                            <th scope="col">Precio</th>
+                                            <th scope="col">Subtotal</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td><img src="img/platos/Gohan-Salmón.jpg" width="120" height="100">
-                                            </td>
-
-                                            <td>$1.999</td>
-                                            <td>$1.999</td>
-                                            <td>1</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td><img src="img/platos/muffin.jpg" width="120" height="100">
-                                            </td>
-
-                                            <td>$1.999</td>
-                                            <td>$1.999</td>
-                                            <td>2</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td><img src="img/platos/promo3.jpg" width="120" height="100">
-                                            </td>
-
-                                            <td>$5.998</td>
-                                            <td>$1.999</td>
-                                            <td>3</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">Total</th>
-                                            <td></td>
-                                            <td>$5.500</td>
-                                            <td>$5.997</td>
-                                            <td>6</td>
-
-
-                                        </tr>
+                                        <c:if test="${msjCarrito!=null}">
+                                            <tr>
+                                                <td colspan="6">
+                                                    <div class="alert alert-dark text-center">${msjCarrito}</div>
+                                                </td>
+                                            </tr>
+                                        </c:if>
+                                        <c:set var="contador" value="${1}" />
+                                        <c:forEach items="${carrito}" var="c">
+                                            <tr>
+                                                <th scope="row">${contador}</th>
+                                                <td><img src="Delivery/media/producto/${c.producto.imagen}" width="120" height="100"></td>
+                                                <td>${c.producto.nombre}</td>
+                                                <td>${c.cantidad}</td>
+                                                <td>${c.producto.precio}</td>
+                                                <td>${c.subtotal}</td>
+                                                <td>
+                                                    <form method="POST" action="DetalleCompra">
+                                                        <input type="submit" value="Quitar" name="enviar" id="enviar"/>
+                                                        <input type="hidden" value="${c.producto.idProducto}" name="idProducto" id="idProducto"/>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <c:set var="contador" value="${contador + 1}" />
+                                        </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
-
-
-
-
                         </div>
                     </div>
                 </div>

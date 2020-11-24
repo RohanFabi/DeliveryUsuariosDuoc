@@ -63,10 +63,10 @@ public class LoginServlet extends HttpServlet {
             //si el usuario esta activo
             if (usuario.isActivo()) {
                 if (usuario.getTipoUsuario().getIdTipoUsuario() == 2) { //Punto de venta
-                    int idPuntoVenta = udao.buscarPuntoVentaUsuario(usuario.getIdUsuario());
-                    PuntoVenta pv = new PuntoVenta();
-                    pv.setIdPuntoVenta(idPuntoVenta);
-                    usuario.setPuntoVenta(pv);
+                    int idPuntoVenta = udao.buscarPuntoVentaUsuario(usuario.getIdUsuario()); //
+                    PuntoVenta pv = new PuntoVenta(); //
+                    pv.setIdPuntoVenta(idPuntoVenta); //
+                    usuario.setPuntoVenta(pv); //
                     usuario.setContrasena("null");
                     request.getSession().setAttribute("login", usuario); 
                     response.sendRedirect("Administracion");

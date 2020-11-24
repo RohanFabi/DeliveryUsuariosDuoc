@@ -20,6 +20,7 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.24.1/feather.min.js" crossorigin="anonymous">
         </script>
+        <script src="js/alertas.js" type="text/javascript"></script>
     </head>
     <body>
         <div id="layoutDefault">
@@ -36,7 +37,7 @@
                                 aria-haspopup="true" aria-expanded="false">Categorias</button>
                         <div class="dropdown-menu animated--fade-in-up">
                             <c:forEach items="${categorias}" var="c">
-                                <a class="dropdown-item" href="#!">${c.descripcion}</a>
+                                <a class="dropdown-item" href="PuntoVenta?pv=${puntoventa.nombre}-${c.descripcion}">${c.descripcion}</a>
                             </c:forEach>
                         </div>
                     </div>
@@ -44,7 +45,7 @@
                            placeholder="Busca tu pedido!" />
                 </div>
             </div>
-            <c:forEach items="${categorias}" var="cat">
+            <c:forEach items="${categoriasProducto}" var="cat">
                 <section class="bg-white py-5 ">
                     <div class="container">
                         <div class="d-flex align-items-center justify-content-between mb-4">
@@ -56,17 +57,18 @@
                                 <c:if test="${p.categoria.idCategoria == cat.idCategoria}">
                                     <div class="col-lg-4 mb-5 mb-lg-0">
                                         <a class="card lift h-100" href="#!">
-
                                             <img class="card-img-top" src="Delivery/media/producto/${p.imagen}" alt="..." />
                                             <div class="card-body">
                                                 <h3 class="text-primary mb-0">${p.precio}</h3>
                                                 <div class="small text-gray-800 font-weight-500">${p.nombre}</div>
-                                                <div class="small text-gray-500">${t.nombre}</div>
                                             </div>
-                                            <div
-                                                class="card-footer bg-transparent border-top d-flex align-items-center justify-content-between">
-                                                <div class="small text-gray-500">Añadir</div>
-                                                <div class="small text-gray-500"><i data-feather="arrow-right"></i></div>
+                                            <div class="card-footer bg-transparent border-top d-flex align-items-center">
+                                                <form method="POST" action="PuntoVenta" name="formularioAgregarCarrito">
+                                                    <button  class="btn btn-light btn-block" <c:if test="${esOtroPunto==0}">type="submit"</c:if>
+                                                        <c:if test="${esOtroPunto==1}">type="button" onclick="confirmarCambioCarrito()"</c:if>
+                                                        <c:if test="${login==null}">disabled</c:if>>Agregar</button>
+                                                    <input type="hidden" name="idProducto" id="idProducto" value="${p.idProducto}"/>
+                                                </form>
                                             </div>
                                         </a>
                                     </div>

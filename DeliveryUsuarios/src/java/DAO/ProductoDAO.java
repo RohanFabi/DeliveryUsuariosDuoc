@@ -40,7 +40,7 @@ public class ProductoDAO {
         List<Producto> productos = null;
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
-            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :id order by p.idProducto desc";            
+            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :id order by p.idProducto DESC";            
             Query q = sesion.createQuery(hql);
             q.setParameter("id", idPuntoVenta);
             
@@ -132,5 +132,40 @@ public class ProductoDAO {
             sesion.close();
         }
         return categorias;
-    } 
+    }
+    
+    public List<Producto> listarProductosbyTiendaCategoria(int idPuntoVenta, int idCategoria) {
+        List<Producto> productos = null;
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :idPuntoVenta and p.categoria.idCategoria= :idCategoria order by p.idProducto DESC";            
+            Query q = sesion.createQuery(hql);
+            q.setParameter("idPuntoVenta", idPuntoVenta);
+            q.setParameter("idCategoria", idCategoria);
+            
+            productos = q.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return productos;
+    }
+    
+    public Categoria buscarCategoriabyDescripcion(String descripcion) {
+        Categoria categoria = new Categoria();
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "from Categoria c where c.descripcion= :descripcion";            
+            Query q = sesion.createQuery(hql);
+            q.setParameter("descripcion", descripcion);
+            
+            categoria = (Categoria) q.uniqueResult();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return categoria;
+    }
 }

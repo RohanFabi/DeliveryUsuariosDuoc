@@ -154,7 +154,7 @@
                             </ul>
                             <!-- BOTON COMPRAR -->
                             <a class="btn-blue btn rounded-pill px-4 ml-lg-4" href="DetalleCompra">Comprar<i
-                                    class="fas fa-arrow-right ml-1"></i></a>
+                                    class="fas fa-shopping-cart ml-1"></i> ${contadorCarrito}</a>
                         </div>
                     </div>
                 </nav>

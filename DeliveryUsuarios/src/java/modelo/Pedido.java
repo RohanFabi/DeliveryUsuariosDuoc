@@ -26,6 +26,16 @@ public class Pedido  implements java.io.Serializable {
     public Pedido() {
     }
 
+    public Pedido(Estado estado, MetodoPago metodoPago, TipoEntrega tipoEntrega, Ubicacion ubicacion, Usuario usuario, Date fechaventa, int total, String detalleUbicacion) {
+        this.estado = estado;
+        this.metodoPago = metodoPago;
+        this.tipoEntrega = tipoEntrega;
+        this.ubicacion = ubicacion;
+        this.usuario = usuario;
+        this.fechaventa = fechaventa;
+        this.total = total;
+        this.detalleUbicacion = detalleUbicacion;
+    }
 	
     public Pedido(Estado estado, MetodoPago metodoPago, TipoEntrega tipoEntrega, Ubicacion ubicacion, Usuario usuario, Date fechaventa, int total) {
         this.estado = estado;

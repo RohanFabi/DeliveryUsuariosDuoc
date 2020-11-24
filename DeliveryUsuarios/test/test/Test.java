@@ -28,6 +28,13 @@ public class Test {
         ProductoDAO pd = new ProductoDAO();
         System.out.println(pd.listarProductoIdTienda(1));
 
+//            PuntoVentaDAO pvDAO=new PuntoVentaDAO();
+//            PuntoVenta pv=pvDAO.buscarNombreSede("Achoclonados", 1);
+//            System.out.println("nombre punto "+pv.getNombre());
+        List<Producto> productos = pd.listarProductosbyTiendaCategoria(1, 1);
+        for (Producto c : productos) {
+            System.out.println(c.getNombre()+" "+c.getPrecio());
+        }
 
     }
 

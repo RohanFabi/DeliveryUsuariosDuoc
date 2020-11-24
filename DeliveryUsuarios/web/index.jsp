@@ -46,7 +46,7 @@
                             <div class="row justify-content-center">
                                 <c:forEach items="${puntos}" var="t">
                                     <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <a class="card lift" href="${t.nombre}"><img class="card-img-top" src="img/logosTiendas/${t.imagen}" alt="..." />
+                                        <a class="card lift" href="PuntoVenta?pv=${t.nombre}"><img class="card-img-top" src="img/logosTiendas/${t.imagen}" alt="..." />
                                             <div class="card-body text-center py-3">
                                                 <h6 class="card-title mb-0">${t.nombre}</h6>
                                             </div>
