@@ -99,4 +99,21 @@ public class UsuarioDAO {
         }
         return idPunto;
     }
+    
+    public Usuario buscarUsuariobyId(int idUsuario) {
+        Usuario u = new Usuario();
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "from Usuario u where u.idUsuario= :idUsuario";
+            Query q = sesion.createQuery(hql);
+            q.setParameter("idUsuario", idUsuario);
+            
+            u = (Usuario) q.uniqueResult();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return u;
+    }
 }

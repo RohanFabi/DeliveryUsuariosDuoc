@@ -37,7 +37,8 @@
                             idProducto: "0",
                             texto: textoBuscado
                         },
-                        success: function (result) {
+                        success: function (respuesta) {
+                            //var productos = respuesta. ;
                             $("#divProductos").load(" #divProductos");
                         }
                     });

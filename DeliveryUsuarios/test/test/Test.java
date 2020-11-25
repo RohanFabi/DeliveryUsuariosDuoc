@@ -5,11 +5,14 @@
  */
 package test;
 
+import DAO.PedidoDAO;
 import DAO.ProductoDAO;
 import DAO.PuntoVentaDAO;
 import java.util.Iterator;
 import java.util.List;
 import modelo.Categoria;
+import modelo.DetallePedido;
+import modelo.Pedido;
 import modelo.Producto;
 import modelo.PuntoVenta;
 
@@ -33,9 +36,10 @@ public class Test {
 //            PuntoVentaDAO pvDAO=new PuntoVentaDAO();
 //            PuntoVenta pv=pvDAO.buscarNombreSede("Achoclonados", 1);
 //            System.out.println("nombre punto "+pv.getNombre());
-        List<Producto> productos = pd.listarProductosbyTiendaCategoria(1, 1);
-        for (Producto c : productos) {
-            System.out.println(c.getNombre()+" "+c.getPrecio());
+        PedidoDAO dpDAO= new PedidoDAO();
+        List<Pedido> pedidos = dpDAO.listarPedidosActivosbyPuntoVenta(1);
+        for (Pedido c : pedidos) {
+            System.out.println("id pedido:"+c.getIdPedido()+" id Estado"+c.getEstado().getIdEstado());
         }
 
     }

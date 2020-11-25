@@ -231,10 +231,9 @@ public class PuntoVentaServlet extends HttpServlet {
         PuntoVenta pv = (PuntoVenta) request.getSession().getAttribute("puntoventa");
         //busco los productos que coincidan por el texto y la tienda en la q estoy
         List<Producto> productos = pdao.listarProductosbyBusquedaTienda(busqueda, pv.getIdPuntoVenta());
-        //borro lo q hay dentro del session
-        request.getSession().removeAttribute("productos");
         //sobreescribo el atributo de sesion para mostrarlos
-//        request.getSession().setAttribute("productos", productos);
+        request.getSession().setAttribute("productos", productos);
+            request.setAttribute("productosEncontrados", productos);
     }
 
 }

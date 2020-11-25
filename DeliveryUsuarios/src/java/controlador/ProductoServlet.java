@@ -220,8 +220,10 @@ public class ProductoServlet extends HttpServlet {
     }
 
     private void modificarProducto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //busco el id del input oculto
-        int idProducto = Integer.parseInt(request.getParameter("id"));
+        HttpSession session = request.getSession();
+        //busco el id en la sesion
+        Producto productoMod=(Producto)session.getAttribute("productoMod");
+        int idProducto = productoMod.getIdProducto();
         //busco el nombre del input
         String nombre = request.getParameter("nombre");
         //busco el precio del input
@@ -229,14 +231,15 @@ public class ProductoServlet extends HttpServlet {
         //busco la categoria del combobox
         int categoria = Integer.parseInt(request.getParameter("categoria"));
         //ESTE HAY QUE CAMBIARLO cuando tengamos el id de la tienda por sesion
-        int puntoVenta = 1;
+        Usuario usuarioLog=(Usuario)session.getAttribute("login");
+        int puntoVenta = usuarioLog.getPuntoVenta().getIdPuntoVenta();
         //GUARDAR IMAGEN EN EL PROYECTO
         //busco el nombre de la imagen del input que esta oculto
         String imagen = request.getParameter("nombreImagen");
         //si la imagen no fue cambiada
-        if (imagen.isEmpty()) {
+        if (imagen==null) {
             //guardo el nombre de la imagen actual qque esta en el input oculto
-            imagen = request.getParameter("imagenActual");
+            imagen = productoMod.getImagen();
         } else {
             //GUARDAR IMAGEN EN EL PROYECTO 
             //busco el archivo de imagen
@@ -255,7 +258,6 @@ public class ProductoServlet extends HttpServlet {
             ous.close();
             is.close();
         }
-
         //hago una categoria y le seteo el id
         Categoria cat = new Categoria();
         cat.setIdCategoria(categoria);
@@ -267,10 +269,8 @@ public class ProductoServlet extends HttpServlet {
         producto.setIdProducto(idProducto);
         //modificar producto
         objP.modificar(producto);
-
-        HttpSession session = request.getSession();
         //guardo elproducto para verlo con los nuevos datos
-        session.setAttribute("producto", producto);
+        session.setAttribute("productoMod", producto);
         //redirecciono a la pagina
         request.getRequestDispatcher("Mantenedor/ModificarProducto.jsp").forward(request, response);
     }
