@@ -36,15 +36,24 @@ public class ProductoDAO {
         return productos;
     }
     
-    public List<Producto> listarProductoIdTienda(int idPuntoVenta) {
-        List<Producto> productos = null;
-        Session sesion = HibernateUtil.getSessionFactory().openSession();
+    public List<Producto> listarProductoIdTienda(int idPuntoVenta) { //Devuelve todos los productos de una tienda, buscandolos por ID del punto de venta
+        List<Producto> productos = null; 
+        Session sesion = HibernateUtil.getSessionFactory().openSession(); 
         try {
             String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :id order by p.idProducto DESC";            
-            Query q = sesion.createQuery(hql);
-            q.setParameter("id", idPuntoVenta);
-            
+            Query q = sesion.createQuery(hql); 
+            q.setParameter("id", idPuntoVenta); 
             productos = q.list();
+            
+            List<Categoria> categorias = null;
+            hql = "from Categoria"; 
+            q = sesion.createQuery(hql); 
+            categorias = q.list(); 
+            
+            for(Producto p : productos){ 
+                p.setCategoria(categorias.get(p.getCategoria().getIdCategoria())); 
+            }
+            
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {
@@ -87,7 +96,7 @@ public class ProductoDAO {
         return categorias;
     }
     
-    public int guardar(Producto p) {
+    public int guardar(Producto p) { //Metodo para guardar nuevos productos en la base de datos
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         int id = 0;
         try {

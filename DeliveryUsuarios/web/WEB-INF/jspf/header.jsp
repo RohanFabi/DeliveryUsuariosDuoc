@@ -122,7 +122,7 @@
                                         </div>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
-                                         aria-labelledby="navbarDropdownUserImage">
+                                         aria-labelledby="navbarDropdownUserImage"> 
                                         <!-- Datos usuario -->
                                         <!--la siguiente etiqueta era un h6 pero daba un error 
                                         -no puede tener un div dentro, la cambie por div-->
@@ -162,8 +162,8 @@
         </div>
     </c:when>
     <c:when test="${login.tipoUsuario.idTipoUsuario ==2}"> <!-- Cuando el usuario es Punto de Venta: -->
-        <div id="layoutDefault_content">
-            <main>
+        <div id="layoutDefault_content"> 
+            <main> 
                 <nav class="navbar navbar-marketing navbar-expand-lg navbar-light" style="background-color:001B37 ;">
                     <img class="img-fluid" src="img/logo-duoc-uc-universidad-catolica.jpg" alt="">
                     <a class="navbar-brand text-dark" href="index">Sitio Delivery</a>
@@ -295,36 +295,30 @@
                                     <div class="dropdown-menu dropdown-menu-right animated--fade-in-up"
                                          aria-labelledby="navbarDropdownDocs">
                                         <!-- AYUDA 1 -->
-                                        <a class="dropdown-item py-3"
-                                           href="https://docs.startbootstrap.com/sb-ui-kit-pro/quickstart"
-                                           target="_blank">
+                                        <a class="dropdown-item py-3">
                                             <div class="icon-stack bg-primary-soft text-primary mr-4"><i
                                                     class="fas fa-book-open"></i></div>
-                                            <div>
+                                            <div class="text-dark">
                                                 <div class="small text-gray-500">¿Como comprar?</div>
                                                 Para comprar necesita estar registrado en el sistema.
                                             </div>
                                         </a>
                                         <div class="dropdown-divider m-0"></div>
                                         <!-- AYUDA 2 -->
-                                        <a class="dropdown-item py-3"
-                                           href="https://docs.startbootstrap.com/sb-ui-kit-pro/components"
-                                           target="_blank">
+                                        <a class="dropdown-item py-3">
                                             <div class="icon-stack bg-primary-soft text-primary mr-4"><i
                                                     class="fas fa-code"></i></div>
-                                            <div>
+                                            <div class="text-dark">
                                                 <div class="small text-gray-500">¿Cómo es el pago?</div>
                                                 El pago se realiza una vez el producto este en tus manos.
                                             </div>
                                         </a>
                                         <div class="dropdown-divider m-0"></div>
                                         <!-- AYUDA 3 -->
-                                        <a class="dropdown-item py-3"
-                                           href="https://docs.startbootstrap.com/sb-ui-kit-pro/changelog"
-                                           target="_blank">
+                                        <a class="dropdown-item py-3">
                                             <div class="icon-stack bg-primary-soft text-primary mr-4"><i
                                                     class="fas fa-file"></i></div>
-                                            <div>
+                                            <div class="text-dark">
                                                 <div class="small text-gray-500">Opciones de retiro</div>
                                                 Puede retirar los productos en tienda o seleccionar delivery a su
                                                 ubicacion dentro de la institución

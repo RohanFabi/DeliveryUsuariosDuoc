@@ -1,6 +1,14 @@
-table {
-    border: #b2b2b2 1px solid;
-  }
-  td, th {
-    border: black 1px solid;
-  }
+#btns_creacion input{
+    margin-left:10vw;
+    margin-right:10vw;
+    width: 10vw;
+    font-size: 1.1vw;
+}
+
+#btns_creacion{
+    text-align: center;
+}
+
+#th_imagenProd{
+    text-align: center;
+}

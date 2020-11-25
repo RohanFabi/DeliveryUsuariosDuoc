@@ -66,7 +66,7 @@
                                                 <form method="POST" action="PuntoVenta" name="formularioAgregarCarrito">
                                                     <button  class="btn btn-light btn-block" <c:if test="${esOtroPunto==0}">type="submit"</c:if>
                                                         <c:if test="${esOtroPunto==1}">type="button" onclick="confirmarCambioCarrito()"</c:if>
-                                                        <c:if test="${login==null}">disabled</c:if>>Agregar</button>
+                                                        <c:if test="${login!=null}">enabled</c:if>>Agregar</button>
                                                     <input type="hidden" name="idProducto" id="idProducto" value="${p.idProducto}"/>
                                                 </form>
                                             </div>

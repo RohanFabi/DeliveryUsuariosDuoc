@@ -44,102 +44,60 @@ public class ProductoServlet extends HttpServlet {
         processRequest(request, response);
         //instancio sesion
         HttpSession session = request.getSession();
-        //busco la operacion que viene en la url "Producto?op=..."
-        String operacion = request.getParameter("op");
-        
-        //Si al acceder por url a gestionar productos, el usuario no es punto de venta, se le debe redirigir al indice.
-        Usuario u = (Usuario) session.getAttribute("login");
-        int id = 0; //Inicialización de la variable a un valor por defecto.
-        //Que intente acceder al metodo getIdTipoUsuario() de la clase TipoUsuario, para asignar el resultado a id. 
-        //Si falla, que rediriga al indice.
-        try{ 
-            id = u.getTipoUsuario().getIdTipoUsuario();
-        }catch(Exception e){
-            request.getRequestDispatcher("index.jsp").forward(request,response);
-        }
-        if(id != 2){ //Si el usuario no es un Punto de Venta, también redirige al indice:
-            request.getRequestDispatcher("index.jsp").forward(request,response);
-        }
+        session.removeAttribute("productoMod"); 
+        session.removeAttribute("productos"); 
+        session.setAttribute("modo", "Guardar"); //Se entra a la página con la opción de crear un producto
+        comprobarAcceso(session,request,response);//Si el usuario no "tiene permiso" para estar aquí, se va al indice.
         //Se buscan las categorias de prodyctos y se guardan en una lista
         List<Categoria> categorias = objP.listarCategorias();
         //luego se guardan en un atributo para la pagina
         session.setAttribute("categorias", categorias);
         
-        //si la operacion existe en la url
-        if (operacion != null) {
-            //busco la ultima r en el valor
-            int i = operacion.lastIndexOf("r");
-            //saco el valor hasta la r
-            String op = operacion.substring(0, i + 1);
-            //accion a tomar dependiendo del valor
-            switch (op) {
-                
-                case "modificar":
-                    //si el valor es modificar 
-                    //entra a metodo modificar con ctrl+click en el nombre te lleva al metodo
-                    verModificar(request, response);
-                case "eliminar":
-                    //si el valor es eliminar te lleva al metodo
-                    eliminar(request, response);
-                    break;
-                default:
-                    //esto enrealidad jamas deberia pasar pero por si acaso
-                    List<Producto> productos = objP.listarProductos();
-                    session.setAttribute("productos", productos);
-                    request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
-            }
-        } else {
-            //si no hay opcion en la url
-            //busco los productos y los guardo en una lista
-            Integer idPuntoVenta = ((Usuario) session.getAttribute("login")).getPuntoVenta().getIdPuntoVenta();
-            List<Producto> productos = objP.listarProductoIdTienda(idPuntoVenta);
-            //los guardo en un atributo para la pagina
-            session.setAttribute("productos", productos); 
-            //redirecciono a la pagina
-            request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
-        }
+        actualizarProductos(request,response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        String accion = request.getParameter("guardar");
+        comprobarAcceso(request.getSession(),request,response);//Si el usuario no "tiene permiso" para estar aquí, se va al indice.
+        String accion = request.getParameter("btnPost");
         switch (accion) {
             case "Guardar":
                 guardarProducto(request, response);
+                break; 
+            case "Cancelar": //Si se pulsa el botón de cancelar, se recarga la página, entrando por doGet de este archivo
                 response.sendRedirect("Producto");
                 break;
-            case "Modificar":
+            case "Modificar": //Entrar por apretar este botón selecciona el producto y pone sus datos en los campos de registro
+                request.getSession().setAttribute("modo", "Actualizar");
+                //si el valor es modificar, se entra a este metodo
+                seleccionarParaModificar(request, response);
+                break;
+            case "Actualizar":
                 modificarProducto(request, response);
                 break;
         }
     }
 
-    private void eliminar(HttpServletRequest request, HttpServletResponse response) {
+    private void deshabilitar(HttpServletRequest request, HttpServletResponse response) {
         
     }
-
-    private void verModificar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //leo el valor de la opcion que viene en la url
-        String opcion = request.getParameter("op");
-        //busco la ultima r en el valor
-        int i = request.getParameter("op").lastIndexOf("r");
+    
+    private void seleccionarParaModificar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //busco el id que viene despues de la r del valor
-        int id = Integer.parseInt(opcion.substring(i + 1));
+        //Ojalá se debiese cambiar esto para no tener que sacar el ID producto desde un input invisible, porque esto se podría explotar o utilizar mal a proposito.
+        int id = Integer.parseInt(request.getParameter("idProd")); 
         //busco el producto con el id
         Producto producto = objP.buscarProducto(id);
-        //busco las categorias
-        List<Categoria> categorias = objP.listarCategorias();
-        //instancio una sesion
+        //instancio una sesión
         HttpSession session = request.getSession();
-        //guardo en un aributo las categorias y el producto
-        session.setAttribute("categorias", categorias);
-        session.setAttribute("producto", producto);
+        //guardo en un atributo el producto
+        session.setAttribute("productoMod", producto);
 //        redirecciono a la pagina
-        request.getRequestDispatcher("Mantenedor/ModificarProducto.jsp").forward(request, response);
+        request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
     }
-
+    
     private void guardarProducto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //Se guardan los atributos de la sesión temporalmente como objetos.
         HttpSession session = request.getSession();
@@ -180,42 +138,32 @@ public class ProductoServlet extends HttpServlet {
         //hago un punto de venta y le seteo el id a partir del idPuntoVenta presente en el usuario respaldado.
         PuntoVenta punto = respUser.getPuntoVenta(); 
         //id del producto = guardar producto en la bd
-        int id = objP.guardar(new Producto(cat, punto, nombre, precio, imagen, true));
+        int id = objP.guardar(new Producto(cat, punto, nombre, precio, imagen, true));        
         
-        
-        /* #Mi versión, respaldo pero se puede borrar si ya no hace falta esto
-        Producto nuevoProd = new Producto(cat,punto,nombre,precio,imagen,true);
-        
-        int resultado = objP.guardar(nuevoProd);
-        
-        session = request.getSession();
-        session.setAttribute("login", respUser);
-        session.setAttribute("categoria", respCateg);
-        session.setAttribute("puntos", respPuntosVenta);
-        session.setAttribute("productos", respProducto);
-        */
-        
-        
-        //redirecciono a la pagina
-        request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
+        actualizarProductos(request,response);
     }
 
     private void modificarProducto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //busco el id del input oculto
-        int idProducto = Integer.parseInt(request.getParameter("id"));
+        HttpSession session = request.getSession();
+        //busco el id en la sesion
+        Producto productoMod=(Producto)session.getAttribute("productoMod");
+        int idProducto = productoMod.getIdProducto();
         //busco el nombre del input
         String nombre = request.getParameter("nombre");
         //busco el precio del input
         int precio = Integer.parseInt(request.getParameter("precio"));
         //busco la categoria del combobox
         int categoria = Integer.parseInt(request.getParameter("categoria"));
+        //ESTE HAY QUE CAMBIARLO cuando tengamos el id de la tienda por sesion
+        Usuario usuarioLog=(Usuario)session.getAttribute("login");
+        int puntoVenta = usuarioLog.getPuntoVenta().getIdPuntoVenta();
         //GUARDAR IMAGEN EN EL PROYECTO
         //busco el nombre de la imagen del input que esta oculto
         String imagen = request.getParameter("nombreImagen");
         //si la imagen no fue cambiada
-        if (imagen.isEmpty()) {
+        if (imagen==null||imagen.isEmpty()) {
             //guardo el nombre de la imagen actual qque esta en el input oculto
-            imagen = request.getParameter("imagenActual");
+            imagen = productoMod.getImagen();
         } else {
             //GUARDAR IMAGEN EN EL PROYECTO 
             //busco el archivo de imagen
@@ -223,8 +171,8 @@ public class ProductoServlet extends HttpServlet {
             //lo transforma en una cadena de datos
             InputStream is = archivo.getInputStream();
             //crea un archivo en la locacion indicada
-            //File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
             File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+            //File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
             //lee los datos y los guarda en el archivo
             FileOutputStream ous = new FileOutputStream(f);
             int dato = is.read();
@@ -239,21 +187,45 @@ public class ProductoServlet extends HttpServlet {
         Categoria cat = new Categoria();
         cat.setIdCategoria(categoria);
         //hago un punto de venta y le seteo el id
-        Integer idPuntoVenta = 1;
         PuntoVenta punto = new PuntoVenta();
-        punto.setIdPuntoVenta(idPuntoVenta);
+        punto.setIdPuntoVenta(puntoVenta);
         //instancio un producto con los datos
         Producto producto = new Producto(cat, punto, nombre, precio, imagen, true);
         producto.setIdProducto(idProducto);
         //modificar producto
         objP.modificar(producto);
-
-        HttpSession session = request.getSession();
         //guardo elproducto para verlo con los nuevos datos
-        session.setAttribute("producto", producto);
+        session.setAttribute("productoMod", producto);
         //redirecciono a la pagina
-        
+        //request.getRequestDispatcher("Mantenedor/ModificarProducto.jsp").forward(request, response);
         response.sendRedirect("Producto");
+    }
+    
+    private void comprobarAcceso(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        //Si al acceder por url a gestionar productos, el usuario no es punto de venta, se le debe redirigir al indice.
+        Usuario u = (Usuario) session.getAttribute("login");
+        int id = 0; //Inicialización de la variable a un valor por defecto.
+        //Que intente acceder al metodo getIdTipoUsuario() de la clase TipoUsuario, para asignar el resultado a id. 
+        //Si falla, que rediriga al indice.
+        try{ 
+            id = u.getTipoUsuario().getIdTipoUsuario();
+        }catch(Exception e){
+            request.getRequestDispatcher("index.jsp").forward(request,response);
+        }
+        if(id != 2){ //Si el usuario no es un Punto de Venta, también redirige al indice:
+            request.getRequestDispatcher("index.jsp").forward(request,response);
+        }
+    }
+    
+    private void actualizarProductos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        //Se saca el id punto de venta a partir del usuario logueado, desde ahí se trae un listado de productos de ese punto de venta usando el id obtenido al inicio. 
+        Integer idPuntoVenta = ((Usuario) session.getAttribute("login")).getPuntoVenta().getIdPuntoVenta();
+        List<Producto> productos = objP.listarProductoIdTienda(idPuntoVenta);
+        //los guardo en un atributo para la pagina
+        session.setAttribute("productos", productos);
+        //redirecciono a la pagina
+        request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
     }
 
 }
