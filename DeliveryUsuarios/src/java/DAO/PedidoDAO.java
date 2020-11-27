@@ -64,15 +64,33 @@ public class PedidoDAO {
             sesion.close();
         }
     } 
-    //METODOS PARA MOSTRAR PEDIDOS EN PUNTO VENTA
+    //METODO PARA MOSTRAR PEDIDOS EN PUNTO VENTA
     public List<Pedido> listarPedidosActivosbyPuntoVenta(int idPuntoVenta) {
         List<Pedido> pedidos = null;
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
             String hql = "Select distinct p from Pedido p, DetallePedido dp where dp.producto.puntoVenta.idPuntoVenta= :idPuntoVenta and"
-                    + " dp.pedido.estado.idEstado not in (5, 6) order by p.idPedido DESC";
+                    + " dp.pedido.estado.idEstado not in (5, 6, 7) order by p.idPedido DESC";
             Query q = sesion.createQuery(hql);
             q.setParameter("idPuntoVenta", idPuntoVenta);
+            
+            pedidos = q.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return pedidos;
+    }
+    
+    //METODO PARA MOSTRAR PEDIDOS EN misPedidos
+    public List<Pedido> listarPedidosbyUsuario(int idUsuario) {
+        List<Pedido> pedidos = null;
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "from Pedido p where p.usuario.idUsuario= :idUsuario order by p.idPedido DESC";
+            Query q = sesion.createQuery(hql);
+            q.setParameter("idUsuario", idUsuario);
             
             pedidos = q.list();
         } catch (Exception e) {

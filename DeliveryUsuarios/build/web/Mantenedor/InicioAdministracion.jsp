@@ -44,10 +44,6 @@
                                         <th scope="col">TipoEntrega</th>
                                         <th scope="col">Estado</th>
                                         <th scope="col">Ver Detalle</th>
-                                        <!--<th scope="col">Producto</th>
-                                        <th scope="col">Cantidad</th>
-                                        <th scope="col">Precio</th>
-                                        <th scope="col">Subtotal</th>-->
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -11,7 +11,6 @@ import DAO.UbicacionDAO;
 import DAO.UsuarioDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.lang.System.out;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,8 +32,8 @@ import modelo.Usuario;
  *
  * @author dream
  */
-@WebServlet(name = "AdministracionServlet", urlPatterns = {"/Administracion"})
-public class AdministracionServlet extends HttpServlet {
+@WebServlet(name = "MisPedidosServlet", urlPatterns = {"/MisPedidos"})
+public class MisPedidosServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,7 +47,6 @@ public class AdministracionServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -66,12 +64,12 @@ public class AdministracionServlet extends HttpServlet {
         processRequest(request, response);
         //busco el id de la tienda en sesion
         Usuario u = (Usuario) request.getSession().getAttribute("login");
-        int idTienda = u.getPuntoVenta().getIdPuntoVenta();
+        int idUsuario = u.getIdUsuario();
         //si hay id de tienda
-        if (idTienda > 0) {
+        if (idUsuario > 0) {
             PedidoDAO pedidoDao = new PedidoDAO();
             //busco los pedidos registrados pendientes
-            List<Pedido> pedidos = pedidoDao.listarPedidosActivosbyPuntoVenta(idTienda);
+            List<Pedido> pedidos = pedidoDao.listarPedidosbyUsuario(idUsuario);
             //si no hay pedidos pendientes
             if (pedidos.isEmpty()) {
                 //mensaje para mostrar y redireccion
@@ -150,27 +148,15 @@ public class AdministracionServlet extends HttpServlet {
                     pedido.setDetallePedidos(detallePedidos);
                 }
                 //lo agrego a session
-                request.getSession().setAttribute("listaPedidos", pedidos);
-
-                //test para ver si puedo leer todo
-//                for (Pedido pedidoPrueba : pedidos) {
-//                    out.println("\n Pedido n° " + pedidoPrueba.getIdPedido());
-//                    Set<DetallePedido> listaDetalles = new HashSet<DetallePedido>(0);
-//                    listaDetalles=pedidoPrueba.getDetallePedidos();
-//                    for (DetallePedido detallePedido : listaDetalles) {
-//                        out.println(" Producto: " + detallePedido.getProducto().getNombre());
-//                    }
-//                    
-//                }
+                request.getSession().setAttribute("misPedidos", pedidos);
                 //redireciona a pagina
-                request.getRequestDispatcher("Mantenedor/InicioAdministracion.jsp").forward(request, response);
+                request.getRequestDispatcher("Delivery/MisPedidos.jsp").forward(request, response);
             }
         } else {
             //no hay tienda logeada
             //redireciona a pagina
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
-
     }
 
     /**
@@ -185,23 +171,36 @@ public class AdministracionServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        //rescato el id
-        int idPedido = Integer.parseInt(request.getParameter("lp.idPedido"));
-        //instancio un pedido
-        Pedido pedido = new Pedido();
-        //busco la lista de pedidos de la sesion
-        List<Pedido> listaPedidos = (List<Pedido>) request.getSession().getAttribute("listaPedidos");
-        //recorro la lista para asignar el pedido buscado
-        for (Pedido pedidoLista : listaPedidos) {
-            if (pedidoLista.getIdPedido() == idPedido) {
-                pedido = pedidoLista;
+        //confirmacion de pedido entregado
+        int idPedido = Integer.parseInt(request.getParameter("idPedidoConfirmado"));
+        if (idPedido > 0) {
+            //instanciar el pedido
+            Pedido pedido = new Pedido();
+            //buscar la lista de la session
+            List<Pedido> listaPedidos = (List<Pedido>) request.getSession().getAttribute("misPedidos");
+            //buscar el pedido en la lista
+            for (Pedido pedidoLista : listaPedidos) {
+                if (pedidoLista.getIdPedido() == idPedido) {
+                    pedido = pedidoLista;
+                }
             }
+            //hacer un estado entrega confirmada
+            Estado estado=new Estado();
+            //ESTE VALOR DEBE ESTAR DE ACUERDO A LA BD!!!!!!!
+            estado.setIdEstado(7);
+            //cambiar el dato del estado a entrega confirmadan
+            pedido.setEstado(estado);
+            //instanciar dao
+            PedidoDAO pdao=new PedidoDAO();
+            //actualizar el pedido
+            pdao.modificarPedido(pedido);
+            //redirecciona al servlet para que recargue la lista
+            response.sendRedirect("MisPedidos");
+        } else {
+            //redireciona a pagina
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
-        //lo guardo en la session
-        request.getSession().setAttribute("pedidoBuscado", pedido);
 
-        //redireciona a pagina
-        request.getRequestDispatcher("Mantenedor/DetallePedido.jsp").forward(request, response);
     }
 
     /**

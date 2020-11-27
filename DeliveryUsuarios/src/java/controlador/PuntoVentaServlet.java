@@ -164,8 +164,8 @@ public class PuntoVentaServlet extends HttpServlet {
         processRequest(request, response);
         //AGREGAR AL CARRITO
         //busco el producto
-        int id = Integer.parseInt(request.getParameter("idProducto"));
-        if (id != 0) {
+        String id=request.getParameter("idProducto");
+        if (id != null) {
             agregarProductoCarrito(request, response);
         } else {
             buscarProductoTexto(request, response);
@@ -223,17 +223,21 @@ public class PuntoVentaServlet extends HttpServlet {
         response.sendRedirect("PuntoVenta?pv=" + pv.getNombre());
     }
 
-    private void buscarProductoTexto(HttpServletRequest request, HttpServletResponse response) {
+    private void buscarProductoTexto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //busco el texto
-        String busqueda = request.getParameter("texto");
-        out.println("Entre a busqueda " + busqueda);
+        String busqueda = request.getParameter("textoBusqueda");
         //busco en que tienda estaba
         PuntoVenta pv = (PuntoVenta) request.getSession().getAttribute("puntoventa");
         //busco los productos que coincidan por el texto y la tienda en la q estoy
         List<Producto> productos = pdao.listarProductosbyBusquedaTienda(busqueda, pv.getIdPuntoVenta());
         //sobreescribo el atributo de sesion para mostrarlos
         request.getSession().setAttribute("productos", productos);
-            request.setAttribute("productosEncontrados", productos);
+        //redirecciono a pagina
+        request.getRequestDispatcher("Delivery/PuntoVenta.jsp").forward(request, response);
+        
+        //instrucciones para hacer con ajax
+        //tengo que serializar el list productos en json
+        //return del json
     }
 
 }

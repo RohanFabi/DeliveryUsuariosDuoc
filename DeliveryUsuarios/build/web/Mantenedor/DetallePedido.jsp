@@ -11,7 +11,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <title>Inicio Punto Venta</title>
+        <title>Detalle pedido</title>
         <!-- ESTILOS NECESARIOS PARA EL DISEÑO (sacado de plantilla bootstrap) -->
         <link href="css/styles.css" rel="stylesheet" />
         <!-- FLECHAS Y ICONOS NECESARIOS PARA EL DISEÑO (sacado de plantilla bootstrap) -->
@@ -42,10 +42,6 @@
                                         <th scope="col">TipoEntrega</th>
                                         <th scope="col">Estado</th>
                                         <th scope="col">Cambiar Estado</th>
-                                        <!--<th scope="col">Producto</th>
-                                        <th scope="col">Cantidad</th>
-                                        <th scope="col">Precio</th>
-                                        <th scope="col">Subtotal</th>-->
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -1,6 +1,6 @@
 <%-- 
-    Document   : InicioAdministracion
-    Created on : 10-11-2020, 18:37:00
+    Document   : MisPedidos
+    Created on : 25-11-2020, 19:08:00
     Author     : dream
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -9,10 +9,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta http-equiv="refresh" content="30;url=Administracion" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <title>Inicio Punto Venta</title>
+        <title>Mis pedidos</title>
         <!-- ESTILOS NECESARIOS PARA EL DISEÑO (sacado de plantilla bootstrap) -->
         <link href="css/styles.css" rel="stylesheet" />
         <!-- FLECHAS Y ICONOS NECESARIOS PARA EL DISEÑO (sacado de plantilla bootstrap) -->
@@ -31,7 +30,6 @@
                     <div class="col-lg-12 col-xl-12 center-block">
                         <div class="table-responsive">
                             <table class="table table-striped table-hover" id="tablaPrincipal">
-
                                 <thead class="thead-dark">
                                     <tr>
                                         <th scope="col">n° pedido</th>
@@ -43,33 +41,45 @@
                                         <th scope="col">MetodoPago</th>
                                         <th scope="col">TipoEntrega</th>
                                         <th scope="col">Estado</th>
-                                        <th scope="col">Ver Detalle</th>
+                                        <th scope="col">Cambiar Estado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:if test="${msjPedidos!=null}">
-                                        <tr>
-                                            <td colspan="10">
-                                                <div class="alert alert-dark text-center">${msjPedidos}</div>
-                                            </td>
-                                        </tr>
-                                    </c:if>
-                                    <c:forEach items="${listaPedidos}" var="lp">
+                                    <c:forEach items="${misPedidos}" var="pedidoBuscado">
                                         <tr id="trPedido">
-                                            <th scope="row">${lp.idPedido}</th>
-                                            <td>${lp.fechaventa}</td>
-                                            <td>${lp.usuario.nombre} ${lp.usuario.apellido}</td>
-                                            <td>${lp.ubicacion.nombreEdificio} piso ${lp.ubicacion.piso}</td>
-                                            <td>${lp.detalleUbicacion}</td>
-                                            <td>${lp.total}</td>
-                                            <td>${lp.metodoPago.descripcion}</td>
-                                            <td>${lp.tipoEntrega.descripcion}</td>
-                                            <td>${lp.estado.descripcion}</td>
+                                            <th scope="row">${pedidoBuscado.idPedido}</th>
+                                            <td>${pedidoBuscado.fechaventa}</td>
+                                            <td>${pedidoBuscado.usuario.nombre} ${pedidoBuscado.usuario.apellido}</td>
+                                            <td>${pedidoBuscado.ubicacion.nombreEdificio} piso ${pedidoBuscado.ubicacion.piso}</td>
+                                            <td>${pedidoBuscado.detalleUbicacion}</td>
+                                            <td>${pedidoBuscado.total}</td>
+                                            <td>${pedidoBuscado.metodoPago.descripcion}</td>
+                                            <td>${pedidoBuscado.tipoEntrega.descripcion}</td>
+                                            <td>${pedidoBuscado.estado.descripcion}</td>
                                             <td>
-                                                <form method="POST" action="Administracion" target="_blank">
-                                                    <input type="submit" class="btn btn-info" value="Ver Detalle"/>
-                                                    <input type="hidden" name="lp.idPedido" value="${lp.idPedido}"/>
+                                                <!--Aqui el test debe cambiar de acuerdo al registro de estado q tengan en bd-->
+                                                <form method="POST" action="MisPedidos">
+                                                    <input type="submit" class="btn btn-info" name="btnConfirmacion" value="Confirmar entrega"/>
+                                                    <input type="hidden" name="idPedidoConfirmado" value="${pedidoBuscado.idPedido}" <c:if test="${pedidoBuscado.estado.idEstado!=5}">disabled</c:if>/>
                                                 </form>
+                                            </td>
+                                            </tr>
+                                            <tr id="trDetalle">
+                                                <td colspan="10">
+                                                    <table>
+                                                        <tr>
+                                                            <th>Producto</th>
+                                                            <th>Codigo</th>
+                                                            <th>Valor unitario</th>
+                                                        </tr>
+                                                    <c:forEach items="${pedidoBuscado.detallePedidos}" var="detalleP">
+                                                        <tr>
+                                                            <td>${detalleP.producto.nombre}</td>
+                                                            <td>${detalleP.producto.idProducto}</td>
+                                                            <td>$ ${detalleP.producto.precio}</td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </table>
                                             </td>
                                         </tr>
                                     </c:forEach>
