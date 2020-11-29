@@ -65,7 +65,7 @@
                                     <c:if test="${p.categoria.idCategoria == cat.idCategoria}">
                                         <div class="col-lg-4 mb-5 mb-lg-0">
                                             <a class="card lift h-100" href="#!">
-                                                <img class="card-img-top" src="Delivery/media/producto/${p.imagen}" alt="..." />
+                                                <img class="card-img-top" src="img/producto/${p.imagen}" alt="..." />
                                                 <div class="card-body">
                                                     <h3 class="text-primary mb-0">${p.precio}</h3>
                                                     <div class="small text-gray-800 font-weight-500">${p.nombre}</div>
