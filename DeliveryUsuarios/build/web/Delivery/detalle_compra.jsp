@@ -144,7 +144,7 @@
                                         <c:forEach items="${carrito}" var="c">
                                             <tr>
                                                 <th scope="row">${contador}</th>
-                                                <td><img src="Delivery/media/producto/${c.producto.imagen}" width="120" height="100"></td>
+                                                <td><img src="img/producto/${c.producto.imagen}" width="120" height="100"></td>
                                                 <td>${c.producto.nombre}</td>
                                                 <td>${c.cantidad}</td>
                                                 <td>${c.producto.precio}</td>

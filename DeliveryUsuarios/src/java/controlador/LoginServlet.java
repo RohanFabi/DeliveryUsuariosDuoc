@@ -5,6 +5,7 @@
  */
 package controlador;
 
+import DAO.PuntoVentaDAO;
 import DAO.UsuarioDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -63,11 +64,10 @@ public class LoginServlet extends HttpServlet {
             //si el usuario esta activo
             if (usuario.isActivo()) {
                 if (usuario.getTipoUsuario().getIdTipoUsuario() == 2) { //Punto de venta
-                    int idPuntoVenta = udao.buscarPuntoVentaUsuario(usuario.getIdUsuario()); //
-                    PuntoVenta pv = new PuntoVenta(); //
-                    pv.setIdPuntoVenta(idPuntoVenta); //
-                    usuario.setPuntoVenta(pv); //
-                    usuario.setContrasena("null");
+                    int idPuntoVenta = usuario.getPuntoVenta().getIdPuntoVenta();
+                    PuntoVentaDAO pvDAO = new PuntoVentaDAO();
+                    usuario.setPuntoVenta(pvDAO.buscarById(idPuntoVenta));
+                    
                     request.getSession().setAttribute("login", usuario); 
                     response.sendRedirect("Administracion");
                 } else if (usuario.getTipoUsuario().getIdTipoUsuario() == 3) { //Colaborador o Cliente

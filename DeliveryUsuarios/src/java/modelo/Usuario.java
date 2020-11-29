@@ -28,7 +28,7 @@ public class Usuario  implements java.io.Serializable {
     public Usuario() {
     }
 
-    
+   
     public Usuario(TipoUsuario tipoUsuario, String rut, String nombre, String apellido, String email, String contrasena, boolean activo) {
         this.tipoUsuario = tipoUsuario;
         this.rut = rut;

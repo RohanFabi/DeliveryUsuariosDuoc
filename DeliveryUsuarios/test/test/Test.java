@@ -28,17 +28,9 @@ public class Test {
      */
     public static void main(String[] args) {
 
-        ProductoDAO pd = new ProductoDAO();
-        System.out.println(pd.listarProductoIdTienda(1));
-
-//            PuntoVentaDAO pvDAO=new PuntoVentaDAO();
-//            PuntoVenta pv=pvDAO.buscarNombreSede("Achoclonados", 1);
-//            System.out.println("nombre punto "+pv.getNombre());
-        PedidoDAO dpDAO= new PedidoDAO();
-        List<Pedido> pedidos = dpDAO.listarPedidosActivosbyPuntoVenta(1);
-        for (Pedido c : pedidos) {
-            System.out.println("id pedido:"+c.getIdPedido()+" id Estado"+c.getEstado().getIdEstado());
-        }
+        
+        
+        
 
     }
 

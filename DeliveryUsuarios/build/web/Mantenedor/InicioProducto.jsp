@@ -36,40 +36,40 @@
                         <br>
                     </div>
                     <form method="POST" enctype="multipart/form-data" name="guardarProducto" action="Producto">
-                    <table align="center" >
-                        <tr>
-                            <th><label for="nombre">Nombre</label></th>
-                            <th><input type="text" id="nombre" name="nombre" value="${productoMod.nombre}" required></th>
-                            <th><label for="categoria">Categoria</label>
-                                <select name="categoria" required="True">
-                                    <option value="">Seleccionar</option>
-                                    <c:forEach var="c" items="${categorias}">
-                                        <option value="${c.idCategoria}" <c:if test="${productoMod.categoria.idCategoria == c.idCategoria}">selected</c:if>>${c.descripcion}</option>
-                                    </c:forEach>
-                                </select>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th><label for="precio">Precio</label></th>
-                            <th><input type="text" id="precio" name="precio" value="${productoMod.precio}" required></th>
-                            <th id="th_imagenProd">
-                                <c:choose>
-                                    <c:when test="${productoMod.idProducto != null}">
-                                        <label for="imagen">Imagen actual</label> <br>
-                                        <img id="sqr_imgProd" src="Delivery/media/producto/${productoMod.imagen}" alt="..." style="width:10vw; border-style:solid;"/> <br>
-                                        <label for="imagen">Actualizar</label> <br>
-                                        <input class="form-control" type="file" name="imagen" onchange="cargarArchivo(this)">
-                                    </c:when>
-                                    <c:otherwise>
-                                        <div>
-                                            <label for="imagen">Imagen</label>
+                        <table align="center" >
+                            <tr>
+                                <th><label for="nombre">Nombre</label></th>
+                                <th><input type="text" id="nombre" name="nombre" value="${productoMod.nombre}" required></th>
+                                <th><label for="categoria">Categoria</label>
+                                    <select name="categoria" required="True">
+                                        <option value="">Seleccionar</option>
+                                        <c:forEach var="c" items="${categorias}">
+                                            <option value="${c.idCategoria}" <c:if test="${productoMod.categoria.idCategoria == c.idCategoria}">selected</c:if>>${c.descripcion}</option>
+                                        </c:forEach>
+                                    </select>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th><label for="precio">Precio</label></th>
+                                <th><input type="text" id="precio" name="precio" value="${productoMod.precio}" required></th>
+                                <th id="th_imagenProd">
+                                    <c:choose>
+                                        <c:when test="${productoMod.idProducto != null}">
+                                            <label for="imagen">Imagen actual</label> <br>
+                                            <img id="sqr_imgProd" src="img/producto/${productoMod.imagen}" alt="..." style="width:10vw; border-style:solid;"/> <br>
+                                            <label for="imagen">Actualizar</label> <br>
                                             <input class="form-control" type="file" name="imagen" onchange="cargarArchivo(this)">
-                                        </div>
-                                    </c:otherwise>
-                                </c:choose>
-                            </th>
-                        </tr>
-                    </table>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div>
+                                                <label for="imagen">Imagen</label>
+                                                <input class="form-control" type="file" name="imagen" onchange="cargarArchivo(this)">
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </th>
+                            </tr>
+                        </table>
 
                         <input type="hidden" name="nombreImagen" value="">
                         <input type="hidden" name="imagenActual" value="${productoMod.imagen}">
@@ -90,7 +90,7 @@
                             <th>Precio</th>
                             <th>Categoria</th>
                             <th>¿Producto disponible?</th>
-                            <th>Acciones</th>
+                            <th colspan="2">Acciones</th>
                         </tr>
                         <c:set var = "productos" scope = "session" value = "${productos}"/>
                         <c:choose>
@@ -99,26 +99,49 @@
                                     <td colspan="3"><p>No hay producto</p></td>                
                                 </tr>
                             </c:when>
-                                
+
                             <c:otherwise>
                                 <c:forEach items="${productos}" var="p">
                                     <tr>
-                                        <th>${ p.idProducto }</th>
-                                        <th>${ p.nombre }</th>
+                                        <th>${p.idProducto}</th>
+                                        <th>${p.nombre }</th>
                                         <th>${p.precio}</th>
-                                        <th>${ p.categoria.descripcion}</th>
-                                        <th>${ p.activo }</th>
+                                        <th>${p.categoria.descripcion}</th>
+                                        <th> 
+                                            <c:choose>
+                                                <c:when test = "${p.activo==true}">
+                                                    Sí
+                                                </c:when>
+                                                <c:otherwise>
+                                                    No
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </th>
                                         <th>
-                                            <form method="POST" action="Producto" class="form form-inline">
+                                            <form method="POST" action="Producto">
                                                 <input type="submit" value="Modificar" name="btnPost">
                                                 <input type="hidden" value="${p.idProducto}" name="idProd">
-                                                <input type="submit" value="Desactivar" name="btnPost">
+
                                             </form>
+                                        </th>
+                                        <th>
+                                            <form method="POST" action="Producto">
+                                                <input type="submit" 
+                                                    <c:choose>
+                                                        <c:when test = "${p.activo==true}">
+                                                            value="Desactivar"
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            value="Activar"
+                                                        </c:otherwise>
+                                                    </c:choose> name="btnPost"> 
+                                                <input type="hidden" value="${p.idProducto}" name="idProd">
+                                            </form> 
                                         </th>
                                     </tr>
                                 </c:forEach>
                             </c:otherwise>
-                                    
+
                         </c:choose>
                     </table>
                     <br><br><br><br>

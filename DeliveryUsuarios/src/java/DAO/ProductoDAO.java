@@ -113,22 +113,6 @@ public class ProductoDAO {
 
     public void modificar(Producto p) {
         Session sesion = HibernateUtil.getSessionFactory().openSession();
-        
-        try {
-            Transaction tx = sesion.beginTransaction();
-            sesion.update(p);
-            tx.commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            sesion.close();
-        }
-    }
-    
-    public void alternarActivo(int idProducto){
-        Producto p = this.buscarProducto(idProducto);
-        p.setActivo(!p.isActivo());
-        Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
             Transaction tx = sesion.beginTransaction();
             sesion.update(p);

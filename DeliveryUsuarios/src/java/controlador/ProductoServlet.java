@@ -53,7 +53,7 @@ public class ProductoServlet extends HttpServlet {
         //luego se guardan en un atributo para la pagina
         session.setAttribute("categorias", categorias);
         
-        actualizarProductos(request,response);
+        actualizarListadoProductos(request,response);
     }
 
     @Override
@@ -70,7 +70,8 @@ public class ProductoServlet extends HttpServlet {
                 response.sendRedirect("Producto");
                 break;
             case "Modificar": //Entrar por apretar este botón selecciona el producto y pone sus datos en los campos de registro
-                request.getSession().setAttribute("modo", "Actualizar");
+                //Esto cambia la función del botón que dice "Guardar", entre crear un producto o Modificar
+                request.getSession().setAttribute("modo", "Actualizar"); 
                 //si el valor es modificar, se entra a este metodo
                 seleccionarParaModificar(request, response);
                 break;
@@ -78,15 +79,12 @@ public class ProductoServlet extends HttpServlet {
                 modificarProducto(request, response);
                 break;
             case "Desactivar":
-                ProductoDAO pDAO = new ProductoDAO();
-                pDAO.alternarActivo(0);
-//                alternarProdHabilitado(request,response);
+                alternarEstadoProducto(request,response);
+                break;
+            case "Activar":
+                alternarEstadoProducto(request,response);
                 break;
         }
-    }
-
-    private void deshabilitar(HttpServletRequest request, HttpServletResponse response) {
-        
     }
     
     private void seleccionarParaModificar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -126,8 +124,8 @@ public class ProductoServlet extends HttpServlet {
         //lo transforma en una cadena de datos
         InputStream is = archivo.getInputStream();
         //crea un archivo en la locacion indicada
-//        File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
-        File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+//        File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/img/producto/" + imagen);
+        File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/img/producto/" + imagen);
         //lee los datos y los guarda en el archivo
         FileOutputStream ous = new FileOutputStream(f);
         int dato = is.read();
@@ -145,7 +143,7 @@ public class ProductoServlet extends HttpServlet {
         //id del producto = guardar producto en la bd
         int id = objP.guardar(new Producto(cat, punto, nombre, precio, imagen, true));        
         
-        actualizarProductos(request,response);
+        actualizarListadoProductos(request,response);
     }
 
     private void modificarProducto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -176,8 +174,8 @@ public class ProductoServlet extends HttpServlet {
             //lo transforma en una cadena de datos
             InputStream is = archivo.getInputStream();
             //crea un archivo en la locacion indicada
-            File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
-            //File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+            File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/img/producto/" + imagen);
+            //File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/img/producto/" + imagen);
             //lee los datos y los guarda en el archivo
             FileOutputStream ous = new FileOutputStream(f);
             int dato = is.read();
@@ -206,63 +204,13 @@ public class ProductoServlet extends HttpServlet {
         response.sendRedirect("Producto");
     }
     
-//    private void alternarProdHabilitado(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-//        HttpSession session = request.getSession();
-//        //busco el id en la sesion
-//        Producto productoMod=(Producto)session.getAttribute("productoMod");
-//        int idProducto = productoMod.getIdProducto();
-//        //busco el nombre del input
-//        String nombre = request.getParameter("nombre");
-//        //busco el precio del input
-//        int precio = Integer.parseInt(request.getParameter("precio"));
-//        //busco la categoria del combobox
-//        int categoria = Integer.parseInt(request.getParameter("categoria"));
-//        //ESTE HAY QUE CAMBIARLO cuando tengamos el id de la tienda por sesion
-//        Usuario usuarioLog=(Usuario)session.getAttribute("login");
-//        int puntoVenta = usuarioLog.getPuntoVenta().getIdPuntoVenta();
-//        //GUARDAR IMAGEN EN EL PROYECTO
-//        //busco el nombre de la imagen del input que esta oculto
-//        String imagen = request.getParameter("nombreImagen");
-//        //si la imagen no fue cambiada
-//        if (imagen==null||imagen.isEmpty()) {
-//            //guardo el nombre de la imagen actual qque esta en el input oculto
-//            imagen = productoMod.getImagen();
-//        } else {
-//            //GUARDAR IMAGEN EN EL PROYECTO 
-//            //busco el archivo de imagen
-//            Part archivo = request.getPart("imagen");
-//            //lo transforma en una cadena de datos
-//            InputStream is = archivo.getInputStream();
-//            //crea un archivo en la locacion indicada
-//            File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
-//            //File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
-//            //lee los datos y los guarda en el archivo
-//            FileOutputStream ous = new FileOutputStream(f);
-//            int dato = is.read();
-//            while (dato != -1) {
-//                ous.write(dato);
-//                dato = is.read();
-//            }
-//            ous.close();
-//            is.close();
-//        }
-//        //hago una categoria y le seteo el id
-//        Categoria cat = new Categoria();
-//        cat.setIdCategoria(categoria);
-//        //hago un punto de venta y le seteo el id
-//        PuntoVenta punto = new PuntoVenta();
-//        punto.setIdPuntoVenta(puntoVenta);
-//        //instancio un producto con los datos
-//        Producto producto = new Producto(cat, punto, nombre, precio, imagen, true);
-//        producto.setIdProducto(idProducto);
-//        //modificar producto
-//        objP.modificar(producto);
-//        //guardo elproducto para verlo con los nuevos datos
-//        session.setAttribute("productoMod", producto);
-//        //redirecciono a la pagina
-//        //request.getRequestDispatcher("Mantenedor/ModificarProducto.jsp").forward(request, response);
-//        response.sendRedirect("Producto");
-//    }
+    private void alternarEstadoProducto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        ProductoDAO pDAO = new ProductoDAO();
+        Producto prod = pDAO.buscarProducto(Integer.parseInt(request.getParameter("idProd"))); //Recupera el producto y sus datos desde el id. 
+        prod.setActivo(!prod.isActivo());
+        pDAO.modificar(prod);
+        actualizarListadoProductos(request,response);
+    }
     
     private void comprobarAcceso(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         //Si al acceder por url a gestionar productos, el usuario no es punto de venta, se le debe redirigir al indice.
@@ -280,7 +228,7 @@ public class ProductoServlet extends HttpServlet {
         }
     }
     
-    private void actualizarProductos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void actualizarListadoProductos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         //Se saca el id punto de venta a partir del usuario logueado, desde ahí se trae un listado de productos de ese punto de venta usando el id obtenido al inicio. 
         Integer idPuntoVenta = ((Usuario) session.getAttribute("login")).getPuntoVenta().getIdPuntoVenta();

@@ -33,7 +33,7 @@ public class PuntoVentaDAO {
         return puntos;
     }
         
-    public PuntoVenta buscar(int id) {
+    public PuntoVenta buscarById(int id) {
         PuntoVenta punto = new PuntoVenta();
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {

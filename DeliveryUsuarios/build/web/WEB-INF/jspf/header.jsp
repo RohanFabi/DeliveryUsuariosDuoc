@@ -5,7 +5,7 @@
 <c:choose>
     <c:when test="${login.tipoUsuario.idTipoUsuario ==3}"> <!--Cuando el usuario es colaborador/cliente: -->
         <div id="layoutDefault_content">
-            <main>
+            <main> 
                 <nav class="navbar navbar-marketing navbar-expand-lg navbar-light" style="background-color:001B37 ;">
                     <div class="container">
                         <img class="img-fluid" src="img/logo-duoc-uc-universidad-catolica.jpg" alt="">
@@ -22,7 +22,7 @@
                                 <!-- ITEM OFERTAS -->
                                 <li class="nav-item dropdown dropdown-xl no-caret">
                                     <a class="nav-link dropdown-toggle" id="navbarDropdownDemos" href="#" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Promociones<i
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tiendas<i
                                             class="fas fa-chevron-right dropdown-arrow"></i></a>
                                     <div class="dropdown-menu dropdown-menu-right animated--fade-in-up mr-lg-n15"
                                          aria-labelledby="navbarDropdownDemos">
@@ -35,7 +35,7 @@
                                                     <div class="text-white text-center z-1">
                                                         <div class="mb-3"></div>
                                                         <a class="btn btn-white btn-sm text-primary rounded-pill"
-                                                           href="{%url 'inicio'%}">Todas las ofertas</a>
+                                                           href="index">Todas las ofertas</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -53,8 +53,8 @@
                                                     <!-- COLUMNA DERECHA -->
                                                     <div class="col-lg-6">
 
-                                                        <a class="dropdown-item" href="{%url 'Junaeb'%}">Junaeb</a><a
-                                                            class="dropdown-item" href="{%url 'Docente'%}">Docente</a>
+                                                        <a class="dropdown-item" href="#">Junaeb</a><a
+                                                            class="dropdown-item" href="#">Docente</a>
                                                         <div class="dropdown-divider border-0"></div>
 
                                                     </div>
@@ -76,8 +76,9 @@
                                         <a class="dropdown-item py-3"
                                            href="https://docs.startbootstrap.com/sb-ui-kit-pro/quickstart"
                                            target="_blank">
-                                            <div class="icon-stack bg-primary-soft text-primary mr-4"><i
-                                                    class="fas fa-book-open"></i></div>
+                                            <div class="icon-stack bg-primary-soft text-primary mr-4">
+                                                <i class="fas fa-book-open"></i>
+                                            </div>
                                             <div>
                                                 <div class="small text-gray-500">¿Cómo comprar?</div>
                                                 Para comprar necesita estar registrado en el sistema.
@@ -140,7 +141,7 @@
                                             Cuenta
                                         </a>
                                         <!-- Pedido -->
-                                        <a class="dropdown-item" href="estado.html">
+                                        <a class="dropdown-item" href="MisPedidos">
                                             <div class="dropdown-item-icon"><i data-feather="file"></i></div>
                                             Pedidos
                                         </a>
@@ -168,8 +169,8 @@
                     <img class="img-fluid" src="img/logo-duoc-uc-universidad-catolica.jpg" alt="">
                     <a class="navbar-brand text-dark" href="index">Sitio Delivery</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" 
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation"><i data-feather="menu"></i> 
+                            aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation"><i data-feather="menu"></i> 
                     </button>
                     <ul class="navbar-nav ml-auto mr-lg-5">
                         <!-- INCIO -->
@@ -184,29 +185,27 @@
 
                                 <!-- Imagen usuaurio en nav -->
                                 <div class="avatar avatar-online avatar-lg mr-1">
-                                    <img class="avatar-img img-fluid" src="img/logosTiendas/logo-ACHOCLONADOS.png"> 
-                                    <!--<img class="avatar-img img-fluid" src="img/logosTiendas/"> -->
+                                    <img class="avatar-img img-fluid" src="img/logosTiendas/${login.puntoVenta.imagen}"> 
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up"
                                  aria-labelledby="navbarDropdownUserImage">
                                 <!-- Datos usuario -->
                                 <div class="dropdown-header d-flex align-items-center">
-                                    <img class="dropdown-user-img"
-                                         src="https://source.unsplash.com/QAB-WJcbgJk/60x60" />
+                                    <img class="dropdown-user-img" src="img/logosTiendas/${login.puntoVenta.imagen}" />
                                     <div class="dropdown-user-details">
                                         <div class="dropdown-user-details-name">${login.nombre}</div>
                                         <div class="dropdown-user-details-email">${login.email}</div>
                                     </div>
                                 </div>
                                 <div class="dropdown-divider"></div>
-                                
+
                                 <!-- Cuenta --> <!--
                                 <a class="dropdown-item" href="#!">
                                     <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                                     Cuenta
                                 </a> -->
-                                
+
                                 <!-- Pedido -->
                                 <a class="dropdown-item" href="Administracion">
                                     <div class="dropdown-item-icon"><i data-feather="file"></i></div>
@@ -243,7 +242,7 @@
                                 <!-- ITEM OFERTAS -->
                                 <li class="nav-item dropdown dropdown-xl no-caret">
                                     <a class="nav-link dropdown-toggle" id="navbarDropdownDemos" href="#" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Promociones<i
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tiendas<i
                                             class="fas fa-chevron-right dropdown-arrow"></i></a>
                                     <div class="dropdown-menu dropdown-menu-right animated--fade-in-up mr-lg-n15"
                                          aria-labelledby="navbarDropdownDemos">
@@ -256,7 +255,7 @@
                                                     <div class="text-white text-center z-1">
                                                         <div class="mb-3"></div>
                                                         <a class="btn btn-white btn-sm text-primary rounded-pill"
-                                                           href="{%url 'inicio'%}">Todas las ofertas</a>
+                                                           href="index">Todas las ofertas</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -275,8 +274,8 @@
                                                     <!-- COLUMNA DERECHA -->
                                                     <div class="col-lg-6">
 
-                                                        <a class="dropdown-item" href="{%url 'Junaeb'%}">Junaeb</a><a
-                                                            class="dropdown-item" href="{%url 'Docente'%}">Docente</a>
+                                                        <a class="dropdown-item" href="#">Junaeb</a><a
+                                                            class="dropdown-item" href="#">Docente</a>
                                                         <div class="dropdown-divider border-0"></div>
 
                                                     </div>
@@ -342,7 +341,7 @@
                                         <!-- Datos usuario -->
                                         <!--la siguiente etiqueta era un h6 pero daba un error 
                                         -no puede tener un div dentro, la cambie por div-->
-                                        
+
                                         <!-- Ingresar -->
                                         <a class="dropdown-item" href="Login">
                                             <div class="dropdown-item-icon"><i data-feather="log-in"></i></div>
