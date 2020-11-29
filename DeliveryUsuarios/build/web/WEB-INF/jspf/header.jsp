@@ -22,7 +22,7 @@
                                 <!-- ITEM OFERTAS -->
                                 <li class="nav-item dropdown dropdown-xl no-caret">
                                     <a class="nav-link dropdown-toggle" id="navbarDropdownDemos" href="#" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Promociones<i
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tiendas<i
                                             class="fas fa-chevron-right dropdown-arrow"></i></a>
                                     <div class="dropdown-menu dropdown-menu-right animated--fade-in-up mr-lg-n15"
                                          aria-labelledby="navbarDropdownDemos">
@@ -35,7 +35,7 @@
                                                     <div class="text-white text-center z-1">
                                                         <div class="mb-3"></div>
                                                         <a class="btn btn-white btn-sm text-primary rounded-pill"
-                                                           href="{%url 'inicio'%}">Todas las ofertas</a>
+                                                           href="index">Todas las ofertas</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -243,7 +243,7 @@
                                 <!-- ITEM OFERTAS -->
                                 <li class="nav-item dropdown dropdown-xl no-caret">
                                     <a class="nav-link dropdown-toggle" id="navbarDropdownDemos" href="#" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Promociones<i
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tiendas<i
                                             class="fas fa-chevron-right dropdown-arrow"></i></a>
                                     <div class="dropdown-menu dropdown-menu-right animated--fade-in-up mr-lg-n15"
                                          aria-labelledby="navbarDropdownDemos">
@@ -256,7 +256,7 @@
                                                     <div class="text-white text-center z-1">
                                                         <div class="mb-3"></div>
                                                         <a class="btn btn-white btn-sm text-primary rounded-pill"
-                                                           href="{%url 'inicio'%}">Todas las ofertas</a>
+                                                           href="index">Todas las ofertas</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -275,8 +275,8 @@
                                                     <!-- COLUMNA DERECHA -->
                                                     <div class="col-lg-6">
 
-                                                        <a class="dropdown-item" href="{%url 'Junaeb'%}">Junaeb</a><a
-                                                            class="dropdown-item" href="{%url 'Docente'%}">Docente</a>
+                                                        <a class="dropdown-item" href="#">Junaeb</a><a
+                                                            class="dropdown-item" href="#">Docente</a>
                                                         <div class="dropdown-divider border-0"></div>
 
                                                     </div>
