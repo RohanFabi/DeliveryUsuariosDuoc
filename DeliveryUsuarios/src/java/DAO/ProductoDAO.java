@@ -135,11 +135,11 @@ public class ProductoDAO {
         return categorias;
     }
     
-    public List<Producto> listarProductosbyTiendaCategoria(int idPuntoVenta, int idCategoria) {
+    public List<Producto> listarProductosActivoByTiendaCategoria(int idPuntoVenta, int idCategoria) {
         List<Producto> productos = null;
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
-            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :idPuntoVenta and p.categoria.idCategoria= :idCategoria order by p.idProducto DESC";            
+            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :idPuntoVenta and p.categoria.idCategoria= :idCategoria and p.activo= true order by p.idProducto DESC";            
             Query q = sesion.createQuery(hql);
             q.setParameter("idPuntoVenta", idPuntoVenta);
             q.setParameter("idCategoria", idCategoria);
@@ -175,10 +175,27 @@ public class ProductoDAO {
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
             String hql = "from Producto p where p.nombre LIKE :textoBusqueda and"
-                    + " p.puntoVenta.idPuntoVenta= :idPuntoVenta order by p.idProducto DESC";            
+                    + " p.puntoVenta.idPuntoVenta= :idPuntoVenta and p.activo= true order by p.idProducto DESC";            
             Query q = sesion.createQuery(hql);
             q.setParameter("idPuntoVenta", idPuntoVenta);
             q.setParameter("textoBusqueda", "%"+textoBusqueda+"%");
+            
+            productos = q.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return productos;
+    }
+    
+    public List<Producto> listarProductoActivoByIdTienda(int idPuntoVenta) {
+        List<Producto> productos = null;
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :id and p.activo= true order by p.idProducto DESC";            
+            Query q = sesion.createQuery(hql);
+            q.setParameter("id", idPuntoVenta);
             
             productos = q.list();
         } catch (Exception e) {

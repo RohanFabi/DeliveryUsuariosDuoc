@@ -102,7 +102,7 @@ public class PuntoVentaServlet extends HttpServlet {
         //si no hay categoria guardada
         if (nombreCategoria.equals("")) {
             //busco los productos de ese punto
-            List<Producto> productos = pdao.listarProductoIdTienda(pv.getIdPuntoVenta());
+            List<Producto> productos = pdao.listarProductoActivoByIdTienda(pv.getIdPuntoVenta());
             //los guardo en un atributo de sesion para mostrarlos
             request.getSession().setAttribute("productos", productos);
             //variable para categorias por producto en sesion
@@ -112,7 +112,7 @@ public class PuntoVentaServlet extends HttpServlet {
             //busco la categoria
             Categoria categoria = pdao.buscarCategoriabyDescripcion(nombreCategoria);
             //busco los productos del punto con la categoria pedida
-            List<Producto> productos = pdao.listarProductosbyTiendaCategoria(pv.getIdPuntoVenta(), categoria.getIdCategoria());
+            List<Producto> productos = pdao.listarProductosActivoByTiendaCategoria(pv.getIdPuntoVenta(), categoria.getIdCategoria());
             //los guardo en un atributo de sesion para mostrarlos
             request.getSession().setAttribute("productos", productos);
             //lista de categorias para que solo contenga la seleccionada
