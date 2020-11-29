@@ -106,13 +106,13 @@
                                         <th>${ p.idProducto }</th>
                                         <th>${ p.nombre }</th>
                                         <th>${p.precio}</th>
-                                        <th>${ p.activo }</th>
                                         <th>${ p.categoria.descripcion}</th>
+                                        <th>${ p.activo }</th>
                                         <th>
                                             <form method="POST" action="Producto" class="form form-inline">
                                                 <input type="submit" value="Modificar" name="btnPost">
                                                 <input type="hidden" value="${p.idProducto}" name="idProd">
-                                                <input type="submit" value="desactivar" name="btnPost">
+                                                <input type="submit" value="Desactivar" name="btnPost">
                                             </form>
                                         </th>
                                     </tr>

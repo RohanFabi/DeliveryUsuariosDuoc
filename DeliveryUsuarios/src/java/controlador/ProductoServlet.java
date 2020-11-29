@@ -77,6 +77,11 @@ public class ProductoServlet extends HttpServlet {
             case "Actualizar":
                 modificarProducto(request, response);
                 break;
+            case "Desactivar":
+                ProductoDAO pDAO = new ProductoDAO();
+                pDAO.alternarActivo(0);
+//                alternarProdHabilitado(request,response);
+                break;
         }
     }
 
@@ -200,6 +205,64 @@ public class ProductoServlet extends HttpServlet {
         //request.getRequestDispatcher("Mantenedor/ModificarProducto.jsp").forward(request, response);
         response.sendRedirect("Producto");
     }
+    
+//    private void alternarProdHabilitado(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+//        HttpSession session = request.getSession();
+//        //busco el id en la sesion
+//        Producto productoMod=(Producto)session.getAttribute("productoMod");
+//        int idProducto = productoMod.getIdProducto();
+//        //busco el nombre del input
+//        String nombre = request.getParameter("nombre");
+//        //busco el precio del input
+//        int precio = Integer.parseInt(request.getParameter("precio"));
+//        //busco la categoria del combobox
+//        int categoria = Integer.parseInt(request.getParameter("categoria"));
+//        //ESTE HAY QUE CAMBIARLO cuando tengamos el id de la tienda por sesion
+//        Usuario usuarioLog=(Usuario)session.getAttribute("login");
+//        int puntoVenta = usuarioLog.getPuntoVenta().getIdPuntoVenta();
+//        //GUARDAR IMAGEN EN EL PROYECTO
+//        //busco el nombre de la imagen del input que esta oculto
+//        String imagen = request.getParameter("nombreImagen");
+//        //si la imagen no fue cambiada
+//        if (imagen==null||imagen.isEmpty()) {
+//            //guardo el nombre de la imagen actual qque esta en el input oculto
+//            imagen = productoMod.getImagen();
+//        } else {
+//            //GUARDAR IMAGEN EN EL PROYECTO 
+//            //busco el archivo de imagen
+//            Part archivo = request.getPart("imagen");
+//            //lo transforma en una cadena de datos
+//            InputStream is = archivo.getInputStream();
+//            //crea un archivo en la locacion indicada
+//            File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+//            //File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/web/Delivery/media/producto/" + imagen);
+//            //lee los datos y los guarda en el archivo
+//            FileOutputStream ous = new FileOutputStream(f);
+//            int dato = is.read();
+//            while (dato != -1) {
+//                ous.write(dato);
+//                dato = is.read();
+//            }
+//            ous.close();
+//            is.close();
+//        }
+//        //hago una categoria y le seteo el id
+//        Categoria cat = new Categoria();
+//        cat.setIdCategoria(categoria);
+//        //hago un punto de venta y le seteo el id
+//        PuntoVenta punto = new PuntoVenta();
+//        punto.setIdPuntoVenta(puntoVenta);
+//        //instancio un producto con los datos
+//        Producto producto = new Producto(cat, punto, nombre, precio, imagen, true);
+//        producto.setIdProducto(idProducto);
+//        //modificar producto
+//        objP.modificar(producto);
+//        //guardo elproducto para verlo con los nuevos datos
+//        session.setAttribute("productoMod", producto);
+//        //redirecciono a la pagina
+//        //request.getRequestDispatcher("Mantenedor/ModificarProducto.jsp").forward(request, response);
+//        response.sendRedirect("Producto");
+//    }
     
     private void comprobarAcceso(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         //Si al acceder por url a gestionar productos, el usuario no es punto de venta, se le debe redirigir al indice.

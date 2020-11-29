@@ -9,6 +9,7 @@ import DAO.ProductoDAO;
 import DAO.PuntoVentaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -109,13 +110,13 @@ public class PuntoVentaServlet extends HttpServlet {
         } else {
             //si hay categoria
             //busco la categoria
-            Categoria categoria=pdao.buscarCategoriabyDescripcion(nombreCategoria);
+            Categoria categoria = pdao.buscarCategoriabyDescripcion(nombreCategoria);
             //busco los productos del punto con la categoria pedida
             List<Producto> productos = pdao.listarProductosbyTiendaCategoria(pv.getIdPuntoVenta(), categoria.getIdCategoria());
             //los guardo en un atributo de sesion para mostrarlos
             request.getSession().setAttribute("productos", productos);
             //lista de categorias para que solo contenga la seleccionada
-            List<Categoria> categoriaSeleccionada=new ArrayList<>();
+            List<Categoria> categoriaSeleccionada = new ArrayList<>();
             categoriaSeleccionada.add(categoria);
             //variable para categorias por producto en sesion
             request.getSession().setAttribute("categoriasProducto", categoriaSeleccionada);
@@ -164,6 +165,27 @@ public class PuntoVentaServlet extends HttpServlet {
         //AGREGAR AL CARRITO
         //busco el producto
         int id = Integer.parseInt(request.getParameter("idProducto"));
+        if (id != 0) {
+            agregarProductoCarrito(request, response);
+        } else {
+            buscarProductoTexto(request, response);
+        }
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+    private void agregarProductoCarrito(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //AGREGAR AL CARRITO
+        //busco el producto
+        int id = Integer.parseInt(request.getParameter("idProducto"));
         Producto producto = pdao.buscarProducto(id);
         //hago un pedido vacio para armar el detalle
         Pedido pedido = new Pedido();
@@ -201,14 +223,17 @@ public class PuntoVentaServlet extends HttpServlet {
         response.sendRedirect("PuntoVenta?pv=" + pv.getNombre());
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    private void buscarProductoTexto(HttpServletRequest request, HttpServletResponse response) {
+        //busco el texto
+        String busqueda = request.getParameter("texto");
+        out.println("Entre a busqueda " + busqueda);
+        //busco en que tienda estaba
+        PuntoVenta pv = (PuntoVenta) request.getSession().getAttribute("puntoventa");
+        //busco los productos que coincidan por el texto y la tienda en la q estoy
+        List<Producto> productos = pdao.listarProductosbyBusquedaTienda(busqueda, pv.getIdPuntoVenta());
+        //sobreescribo el atributo de sesion para mostrarlos
+        request.getSession().setAttribute("productos", productos);
+            request.setAttribute("productosEncontrados", productos);
+    }
 
 }

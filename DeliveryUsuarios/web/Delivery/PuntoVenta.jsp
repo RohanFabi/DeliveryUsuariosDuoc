@@ -23,6 +23,28 @@
         <script src="js/alertas.js" type="text/javascript"></script>
     </head>
     <body>
+        <script src="js/jquery-3.5.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script>
+            function buscarProductoTexto() {
+                $("#textoBusqueda").keyup(function () {
+                    //lo que el usuario escribio
+                    var textoBuscado = $("#textoBusqueda").val();
+                    $.ajax({
+                        type: 'POST',
+                        url: "PuntoVenta",
+                        data: {
+                            idProducto: "0",
+                            texto: textoBuscado
+                        },
+                        success: function (respuesta) {
+                            //var productos = respuesta. ;
+                            $("#divProductos").load(" #divProductos");
+                        }
+                    });
+                });
+            }
+        </script>
         <div id="layoutDefault">
             <jsp:include page="../WEB-INF/jspf/header.jsp"/>
             <!-- LOGO DE TIENDA y SECCION BUSCAR -->
@@ -42,9 +64,11 @@
                         </div>
                     </div>
                     <input class="form-control" type="text" aria-label="Text input with dropdown button"
-                           placeholder="Busca tu pedido!" />
+                           placeholder="Busca tu pedido!" name="textoBusqueda" id="textoBusqueda" onkeyup="buscarProductoTexto()"/>
                 </div>
+                <div id="resultado"></div>
             </div>
+            <div class="row" name="divProductos" id="divProductos"></div>    
             <c:forEach items="${categoriasProducto}" var="cat">
                 <section class="bg-white py-5 ">
                     <div class="container">
@@ -65,8 +89,8 @@
                                             <div class="card-footer bg-transparent border-top d-flex align-items-center">
                                                 <form method="POST" action="PuntoVenta" name="formularioAgregarCarrito">
                                                     <button  class="btn btn-light btn-block" <c:if test="${esOtroPunto==0}">type="submit"</c:if>
-                                                        <c:if test="${esOtroPunto==1}">type="button" onclick="confirmarCambioCarrito()"</c:if>
-                                                        <c:if test="${login!=null}">enabled</c:if>>Agregar</button>
+                                                             <c:if test="${esOtroPunto==1}">type="button" onclick="confirmarCambioCarrito()"</c:if>
+                                                             <c:if test="${login==null}">disabled</c:if>>Agregar</button>
                                                     <input type="hidden" name="idProducto" id="idProducto" value="${p.idProducto}"/>
                                                 </form>
                                             </div>
@@ -77,12 +101,10 @@
                         </div>
                 </section>
             </c:forEach>
-            <jsp:include page="../WEB-INF/jspf/footer.jspf" />
-            <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous">
-            </script>
-            <!-- POR EL MOMENTO NO INFLUYE EL SCRIPT -->
-            <script src="js/scripts.js"></script>
-        </div>
-    </body>
+        </div>    
+        <jsp:include page="../WEB-INF/jspf/footer.jspf" />
+        <!-- POR EL MOMENTO NO INFLUYE EL SCRIPT -->
+        <script src="js/scripts.js"></script>
+    </div>
+</body>
 </html>
