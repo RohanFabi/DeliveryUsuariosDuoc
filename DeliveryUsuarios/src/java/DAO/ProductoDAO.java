@@ -36,21 +36,32 @@ public class ProductoDAO {
         return productos;
     }
     
-    public List<Producto> listarProductoIdTienda(int idPuntoVenta) { //Devuelve todos los productos de una tienda, buscandolos por ID del punto de venta
-        List<Producto> productos = null; 
+    public List<Producto> listarProductoIdTienda(int idPuntoVenta, int idFiltro) { //Devuelve todos los productos de una tienda, buscandolos por ID del punto de venta
+        List<Producto> listadoProductos = null; 
+        String hql;
         Session sesion = HibernateUtil.getSessionFactory().openSession(); 
         try {
-            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :id order by p.idProducto DESC";            
+            switch(idFiltro){
+                case 1: //Solo productos disponibles
+                    hql = "from Producto p where p.activo=true and p.puntoVenta.idPuntoVenta= :id order by p.idProducto DESC"; 
+                    break;
+                case 2: //Solo productos no disponibles
+                    hql = "from Producto p where p.activo=false and p.puntoVenta.idPuntoVenta= :id order by p.idProducto DESC"; 
+                    break;
+                default: //Todos los productos
+                    hql = "from Producto p where p.puntoVenta.idPuntoVenta= :id order by p.idProducto DESC"; 
+                    break;
+            }      
             Query q = sesion.createQuery(hql); 
             q.setParameter("id", idPuntoVenta); 
-            productos = q.list();
+            listadoProductos = q.list();
             
             List<Categoria> categorias = null;
             hql = "from Categoria"; 
             q = sesion.createQuery(hql); 
             categorias = q.list(); 
             
-            for(Producto p : productos){ 
+            for(Producto p : listadoProductos){ 
                 p.setCategoria(categorias.get(p.getCategoria().getIdCategoria())); 
             }
             
@@ -59,7 +70,7 @@ public class ProductoDAO {
         } finally {
             sesion.close();
         }
-        return productos;
+        return listadoProductos;
     }
     
     
@@ -142,11 +153,11 @@ public class ProductoDAO {
         return categorias;
     }
     
-    public List<Producto> listarProductosbyTiendaCategoria(int idPuntoVenta, int idCategoria) {
+    public List<Producto> listarProductosActivoByTiendaCategoria(int idPuntoVenta, int idCategoria) {
         List<Producto> productos = null;
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
-            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :idPuntoVenta and p.categoria.idCategoria= :idCategoria order by p.idProducto DESC";            
+            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :idPuntoVenta and p.categoria.idCategoria= :idCategoria and p.activo= true order by p.idProducto DESC";            
             Query q = sesion.createQuery(hql);
             q.setParameter("idPuntoVenta", idPuntoVenta);
             q.setParameter("idCategoria", idCategoria);
@@ -177,7 +188,29 @@ public class ProductoDAO {
         return categoria;
     }
     
+    //Este metodo se ocupa desde PuntoVentaServlet, para recuperar y cargar todos los productos DISPONIBLES 
+    //de esa tienda, para mostrarselos al colaborador o cliente.
     public List<Producto> listarProductosbyBusquedaTienda(String textoBusqueda, int idPuntoVenta) {
+        List<Producto> productos = null;
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "from Producto p where p.nombre LIKE :textoBusqueda and"
+                    + " p.puntoVenta.idPuntoVenta= :idPuntoVenta and p.activo= true order by p.idProducto DESC";            
+            Query q = sesion.createQuery(hql);
+            q.setParameter("idPuntoVenta", idPuntoVenta);
+            q.setParameter("textoBusqueda", "%"+textoBusqueda+"%");
+            
+            productos = q.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return productos;
+    }
+    
+    //Se ocupa en ProductoServlet para buscar todos los productos, tanto disponibles como desactivados, que coincidan con el nombre ingresado.
+    public List<Producto> listarProdsByBusqueda(int idPuntoVenta, String textoBusqueda) {
         List<Producto> productos = null;
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
@@ -186,6 +219,34 @@ public class ProductoDAO {
             Query q = sesion.createQuery(hql);
             q.setParameter("idPuntoVenta", idPuntoVenta);
             q.setParameter("textoBusqueda", "%"+textoBusqueda+"%");
+            
+            productos = q.list();
+            
+            List<Categoria> categorias = null;
+            hql = "from Categoria"; 
+            q = sesion.createQuery(hql); 
+            categorias = q.list(); 
+            
+            for(Producto p : productos){ 
+                p.setCategoria(categorias.get(p.getCategoria().getIdCategoria())); 
+            }
+            
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return productos;
+    }
+    
+    
+    public List<Producto> listarProductoActivoByIdTienda(int idPuntoVenta) {
+        List<Producto> productos = null;
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "from Producto p where p.puntoVenta.idPuntoVenta= :id and p.activo= true order by p.idProducto DESC";            
+            Query q = sesion.createQuery(hql);
+            q.setParameter("id", idPuntoVenta);
             
             productos = q.list();
         } catch (Exception e) {

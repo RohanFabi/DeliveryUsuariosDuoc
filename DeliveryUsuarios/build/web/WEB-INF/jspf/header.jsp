@@ -67,8 +67,10 @@
                                 <li class="nav-item dropdown no-caret">
                                     <!-- TITULO EN NAV -->
                                     <a class="nav-link dropdown-toggle" id="navbarDropdownDocs" href="#" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ayuda<i
-                                            class="fas fa-chevron-right dropdown-arrow"></i></a>
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Ayuda
+                                        <i class="fas fa-chevron-right dropdown-arrow"></i>
+                                    </a>
                                     <!-- SECCIONES DE AYUDA -->
                                     <div class="dropdown-menu dropdown-menu-right animated--fade-in-up"
                                          aria-labelledby="navbarDropdownDocs">
@@ -143,7 +145,7 @@
                                         <!-- Pedido -->
                                         <a class="dropdown-item" href="MisPedidos">
                                             <div class="dropdown-item-icon"><i data-feather="file"></i></div>
-                                            Pedidos
+                                            Mis Pedidos
                                         </a>
                                         <!-- Salir -->
                                         <a class="dropdown-item" href="Login">

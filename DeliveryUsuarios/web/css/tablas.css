@@ -1,3 +1,6 @@
+
+/*ESTO SERÍA EL VERDADERO STYLESHEET:*/
+
 #btns_creacion input{
     margin-left:10vw;
     margin-right:10vw;
@@ -11,4 +14,8 @@
 
 #th_imagenProd{
     text-align: center;
+}
+
+#busquedaProdPV{
+    margin-left: 10vw;
 }

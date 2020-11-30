@@ -81,8 +81,29 @@
                         </div>
                     </form>
                     <iframe name="null" style="display: none;"></iframe>
-
-                    <br><br><br>
+                    
+                    <br><br> 
+                    <!--Lo que está dentro de este form es la barra de busqueda de productos-->
+                    <form class="col-sm-9" method="POST" action="Producto" style="margin-left: 10vw;"> 
+                    <div class="input-group mb-5"> 
+                        <div class="input-group-prepend"> 
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Filtro
+                            </button>
+                            <div class="dropdown-menu animated--fade-in-up">
+                                <a class="dropdown-item" href="Producto?op=Todos">Todos</a>
+                                <a class="dropdown-item" href="Producto?op=Disponibles">Productos disponibles</a>
+                                <a class="dropdown-item" href="Producto?op=No_Disponibles">Productos no disponibles</a>
+                            </div> 
+                        </div> 
+                        <input class="form-control" type="text" aria-label="Text input with dropdown button"
+                               placeholder="Busca un producto" name="textoBusqueda" id="textoBusqueda"/>
+                        <div class="input-group-append">
+                            <input class="btn btn-info " type="submit"  value="Buscar" name="btnPost"/>
+                        </div>
+                    </div>
+                    </form> 
+                    <!-- Esta es la tabla donde se ponen los productos del punto de venta:--> 
                     <table class="table col-sm-9 table-bordered table-striped" align="center">
                         <tr>
                             <th>Código</th>
@@ -92,11 +113,10 @@
                             <th>¿Producto disponible?</th>
                             <th colspan="2">Acciones</th>
                         </tr>
-                        <c:set var = "productos" scope = "session" value = "${productos}"/>
                         <c:choose>
                             <c:when test = "${empty productos}"> 
                                 <tr>
-                                    <td colspan="3"><p>No hay producto</p></td>                
+                                    <td class="center-block" colspan="6"><p>No hay productos</p></td>                
                                 </tr>
                             </c:when>
 

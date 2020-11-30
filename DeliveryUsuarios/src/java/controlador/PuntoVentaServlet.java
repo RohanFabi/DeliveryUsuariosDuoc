@@ -31,15 +31,6 @@ import modelo.Usuario;
 @WebServlet(name = "PuntoVentaServlet", urlPatterns = {"/PuntoVenta"})
 public class PuntoVentaServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     PuntoVentaDAO pvdao = new PuntoVentaDAO();
     ProductoDAO pdao = new ProductoDAO();
 
@@ -48,15 +39,6 @@ public class PuntoVentaServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -102,7 +84,7 @@ public class PuntoVentaServlet extends HttpServlet {
         //si no hay categoria guardada
         if (nombreCategoria.equals("")) {
             //busco los productos de ese punto
-            List<Producto> productos = pdao.listarProductoIdTienda(pv.getIdPuntoVenta());
+            List<Producto> productos = pdao.listarProductoActivoByIdTienda(pv.getIdPuntoVenta());
             //los guardo en un atributo de sesion para mostrarlos
             request.getSession().setAttribute("productos", productos);
             //variable para categorias por producto en sesion
@@ -112,7 +94,7 @@ public class PuntoVentaServlet extends HttpServlet {
             //busco la categoria
             Categoria categoria = pdao.buscarCategoriabyDescripcion(nombreCategoria);
             //busco los productos del punto con la categoria pedida
-            List<Producto> productos = pdao.listarProductosbyTiendaCategoria(pv.getIdPuntoVenta(), categoria.getIdCategoria());
+            List<Producto> productos = pdao.listarProductosActivoByTiendaCategoria(pv.getIdPuntoVenta(), categoria.getIdCategoria());
             //los guardo en un atributo de sesion para mostrarlos
             request.getSession().setAttribute("productos", productos);
             //lista de categorias para que solo contenga la seleccionada
@@ -125,7 +107,7 @@ public class PuntoVentaServlet extends HttpServlet {
         //busco el carrito
         List<DetallePedido> carrito = (List<DetallePedido>) request.getSession().getAttribute("carrito");
         //si el carrito existe
-        if (carrito != null) {
+        if (carrito != null) { 
             //busco un detalle y guardo el id de tienda
             int idTienda = 0;
             for (int indice = 0; indice < 1; indice++) {
@@ -133,7 +115,7 @@ public class PuntoVentaServlet extends HttpServlet {
                 idTienda = dp.getProducto().getPuntoVenta().getIdPuntoVenta();
             }
             //si el punto de venta es el mismo del carrito
-            if (idTienda == pv.getIdPuntoVenta()) {
+            if (idTienda == pv.getIdPuntoVenta()) { 
                 request.getSession().setAttribute("esOtroPunto", 0);
             } else {
                 //si el punto de venta no es el mismo del carrito
@@ -142,22 +124,13 @@ public class PuntoVentaServlet extends HttpServlet {
 
         } else {
             //el punto de venta no puede ser otro que el del carrito
-            request.getSession().setAttribute("esOtroPunto", 0);
+            request.getSession().setAttribute("esOtroPunto", 0); 
         }
 
         //redirecciono a pagina
         request.getRequestDispatcher("Delivery/PuntoVenta.jsp").forward(request, response);
-
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

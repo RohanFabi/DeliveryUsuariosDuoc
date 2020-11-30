@@ -61,20 +61,23 @@
                             </div>
                             <div class="row">
                                 <!-- PRODUCTO 1 -->
-                                <c:forEach items="${productos}" var="p">
-                                    <c:if test="${p.categoria.idCategoria == cat.idCategoria}">
+                                <c:forEach items="${productos}" var="p"> 
+                                    <c:if test="${p.categoria.idCategoria == cat.idCategoria}"> 
                                         <div class="col-lg-4 mb-5 mb-lg-0">
                                             <a class="card lift h-100" href="#!">
                                                 <img class="card-img-top" src="img/producto/${p.imagen}" alt="..." />
-                                                <div class="card-body">
-                                                    <h3 class="text-primary mb-0">${p.precio}</h3>
+                                                <div class="card-body"> 
+                                                    <h3 class="text-primary mb-0">${p.precio}</h3> 
                                                     <div class="small text-gray-800 font-weight-500">${p.nombre}</div>
                                                 </div>
                                                 <div class="card-footer bg-transparent border-top d-flex align-items-center">
                                                     <form method="POST" action="PuntoVenta" name="formularioAgregarCarrito">
-                                                        <button  class="btn btn-light btn-block" <c:if test="${esOtroPunto==0}">type="submit"</c:if>
+                                                        <button  class="btn btn-light btn-block" 
+                                                                 <c:if test="${esOtroPunto==0}">type="submit"</c:if>
                                                                  <c:if test="${esOtroPunto==1}">type="button" onclick="confirmarCambioCarrito()"</c:if>
-                                                                 <c:if test="${login==null}">disabled</c:if>>Agregar</button>
+                                                                 <c:if test="${login==null || login.tipoUsuario.idTipoUsuario ==3}">disabled</c:if>>
+                                                            Agregar
+                                                        </button>
                                                         <input type="hidden" name="idProducto" id="idProducto" value="${p.idProducto}"/>
                                                     </form>
                                                 </div>
