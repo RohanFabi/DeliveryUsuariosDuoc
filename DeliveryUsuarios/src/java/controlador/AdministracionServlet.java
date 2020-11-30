@@ -185,21 +185,48 @@ public class AdministracionServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        //rescato el id
-        int idPedido = Integer.parseInt(request.getParameter("lp.idPedido"));
-        //instancio un pedido
-        Pedido pedido = new Pedido();
-        //busco la lista de pedidos de la sesion
-        List<Pedido> listaPedidos = (List<Pedido>) request.getSession().getAttribute("listaPedidos");
-        //recorro la lista para asignar el pedido buscado
-        for (Pedido pedidoLista : listaPedidos) {
-            if (pedidoLista.getIdPedido() == idPedido) {
-                pedido = pedidoLista;
+        //si existe el parametro de estado seleccionado
+        if (request.getParameter("estadoSeleccionado") == null) {
+            //QUIERO VER EL DETALLE DEL PEDIDO
+            //rescato el id
+            int idPedido = Integer.parseInt(request.getParameter("lp.idPedido"));
+            //instancio un pedido
+            Pedido pedido = new Pedido();
+            //busco la lista de pedidos de la sesion
+            List<Pedido> listaPedidos = (List<Pedido>) request.getSession().getAttribute("listaPedidos");
+            //recorro la lista para asignar el pedido buscado
+            for (Pedido pedidoLista : listaPedidos) {
+                if (pedidoLista.getIdPedido() == idPedido) {
+                    pedido = pedidoLista;
+                }
             }
+            //lo guardo en la session
+            request.getSession().setAttribute("pedidoBuscado", pedido);
+            //remuevo el estado confirmado de la lista de sesion
+            List<Estado> listaEstados = (List<Estado>) request.getSession().getAttribute("estados");
+            listaEstados.removeIf(estado -> estado.getDescripcion().equals("entrega confirmada"));
+            request.getSession().setAttribute("estados", listaEstados);
+        } else {
+            //QUIERO CAMBIAR EL ESTADO
+            //busco el id del parametro
+            int idEstado = Integer.parseInt(request.getParameter("estadoSeleccionado"));
+            //busco la lista de estados en la sesion
+            List<Estado> listaEstados = (List<Estado>) request.getSession().getAttribute("estados");
+            Estado e = new Estado();
+            //buscar el estado que coincida
+            for (Estado estado : listaEstados) {
+                if (estado.getIdEstado() == idEstado) {
+                    e = estado;
+                }
+            }
+            //busco el pedido que estamos viendo
+            Pedido p = (Pedido) request.getSession().getAttribute("pedidoBuscado");
+            //le seteo el estado al pedido
+            p.setEstado(e);
+            //guardo el pedido con el nuevo estado
+            PedidoDAO pedidoDao = new PedidoDAO();
+            pedidoDao.modificarPedido(p);
         }
-        //lo guardo en la session
-        request.getSession().setAttribute("pedidoBuscado", pedido);
-
         //redireciona a pagina
         request.getRequestDispatcher("Mantenedor/DetallePedido.jsp").forward(request, response);
     }
