@@ -39,6 +39,7 @@
                             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">Categorias</button>
                             <div class="dropdown-menu animated--fade-in-up">
+                                 <a class="dropdown-item" href="PuntoVenta?pv=${puntoventa.nombre}">Todos</a>
                                 <c:forEach items="${categorias}" var="c">
                                     <a class="dropdown-item" href="PuntoVenta?pv=${puntoventa.nombre}-${c.descripcion}">${c.descripcion}</a>
                                 </c:forEach>
