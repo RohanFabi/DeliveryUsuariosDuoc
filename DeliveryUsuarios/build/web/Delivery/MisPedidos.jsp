@@ -59,8 +59,8 @@
                                             <td>
                                                 <!--Aqui el test debe cambiar de acuerdo al registro de estado q tengan en bd-->
                                                 <form method="POST" action="MisPedidos">
-                                                    <input type="submit" class="btn btn-info" name="btnConfirmacion" value="Confirmar entrega"/>
-                                                    <input type="hidden" name="idPedidoConfirmado" value="${pedidoBuscado.idPedido}" <c:if test="${pedidoBuscado.estado.idEstado!=5}">disabled</c:if>/>
+                                                    <input type="submit" class="btn btn-info" name="btnConfirmacion" value="Confirmar entrega" <c:if test="${pedidoBuscado.estado.idEstado!=5}">disabled</c:if>/>
+                                                    <input type="hidden" name="idPedidoConfirmado" value="${pedidoBuscado.idPedido}"/>
                                                 </form>
                                             </td>
                                             </tr>
