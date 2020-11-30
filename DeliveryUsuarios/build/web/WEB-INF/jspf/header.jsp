@@ -3,7 +3,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html> 
 <c:choose>
-    <c:when test="${login.tipoUsuario.idTipoUsuario ==3}"> <!--Cuando el usuario es colaborador/cliente: -->
+    <c:when test="${login.tipoUsuario.idTipoUsuario ==3}"> <!--Cuando el usuario es colaborador/cliente: --> 
         <div id="layoutDefault_content">
             <main> 
                 <nav class="navbar navbar-marketing navbar-expand-lg navbar-light" style="background-color:001B37 ;">
@@ -201,8 +201,11 @@
                                     </div>
                                 </div>
                                 <div class="dropdown-divider"></div>
+                                
+                                <!-- Cuenta --> <!-- Estaba esta opcion placeholder/vacía, pero nos pidieron ocultarla 
+                                y no quitarla, ya que aún no quedaba claro si es que el usuario podría cambiar detalles
+                                de su propia cuenta o no, como su password.
 
-                                <!-- Cuenta --> <!--
                                 <a class="dropdown-item" href="#!">
                                     <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                                     Cuenta
@@ -225,7 +228,9 @@
             </main>
         </div>
     </c:when>
-    <c:otherwise> <!-- Si el usuario no es Punto de Venta ni es Cliente: -->
+    <c:otherwise> <!-- Si el usuario no es Punto de Venta ni es Cliente: (En teoría, esto sería para usuarios administradores, pero no 
+        sabemos que funcionalidades únicas tendrían ellos en este sistema; si es que tienen alguna realmente, ya que tendrían su propia 
+        plataforma de administración aparte.-->
         <div id="layoutDefault_content">
             <main>
                 <nav class="navbar navbar-marketing navbar-expand-lg navbar-light" style="background-color: 001B37;">
@@ -279,7 +284,6 @@
                                                         <a class="dropdown-item" href="#">Junaeb</a><a
                                                             class="dropdown-item" href="#">Docente</a>
                                                         <div class="dropdown-divider border-0"></div>
-
                                                     </div>
                                                 </div>
                                             </div>

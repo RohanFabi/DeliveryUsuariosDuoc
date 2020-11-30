@@ -62,14 +62,18 @@ public class LoginServlet extends HttpServlet {
         Usuario usuario = udao.buscarUsuarioLogin(email, contrasena);
         if (usuario != null) { //si te devolvio algun usuario
             //si el usuario esta activo
-            if (usuario.isActivo()) {
+            if (usuario.isActivo()) { //Si la cuenta de usuario está activa, ya que estas podrían desactivarse.
+                //Al usuario que se almacenará luego como atributo de sesión se le quita la contraseña, por si acaso.
+                usuario.setContrasena("null"); 
                 if (usuario.getTipoUsuario().getIdTipoUsuario() == 2) { //Punto de venta
                     int idPuntoVenta = usuario.getPuntoVenta().getIdPuntoVenta();
                     PuntoVentaDAO pvDAO = new PuntoVentaDAO();
                     usuario.setPuntoVenta(pvDAO.buscarById(idPuntoVenta));
                     
                     request.getSession().setAttribute("login", usuario); 
-                    response.sendRedirect("Administracion");
+//Redirige al listado de pedidos, de momento esa página y su servlet se llaman Administracion, pero podría llamarse 
+//ListadoPedidos o algo más descriptivo
+                    response.sendRedirect("Administracion"); 
                 } else if (usuario.getTipoUsuario().getIdTipoUsuario() == 3) { //Colaborador o Cliente
                     request.getSession().setAttribute("login", usuario);
                     response.sendRedirect("index");
@@ -81,7 +85,7 @@ public class LoginServlet extends HttpServlet {
             }
 
         } else {
-            //guardo un mensaje
+            //guardo el mensaje que se mostrará al redirigir, como contenido de un div en login.jsp
             request.getSession().setAttribute("msjerror", "Email o contraseña incorrectas, si olvido su contraseña comuniquese con un administrador");
             //redirecciono para q no borre el mensaje
             request.getRequestDispatcher("login.jsp").forward(request, response);
