@@ -34,16 +34,16 @@
 
                                 <thead class="thead-dark">
                                     <tr>
-                                        <th scope="col">n° pedido</th>
+                                        <th scope="col">N° Pedido</th>
                                         <th scope="col">Fecha</th>
                                         <th scope="col">Usuario</th>
                                         <th scope="col">Ubicacion</th>
                                         <th scope="col">Comentario</th>
                                         <th scope="col">Total</th>
-                                        <th scope="col">MetodoPago</th>
-                                        <th scope="col">TipoEntrega</th>
+                                        <th scope="col">Metodo de Pago</th>
+                                        <th scope="col">Tipo de Entrega</th>
                                         <th scope="col">Estado</th>
-                                        <th scope="col">Ver Detalle</th>
+                                        <th scope="col">Detalles</th>
                                     </tr>
                                 </thead>
                                 <tbody>

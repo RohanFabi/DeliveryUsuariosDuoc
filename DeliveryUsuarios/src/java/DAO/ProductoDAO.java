@@ -19,24 +19,8 @@ import org.hibernate.Transaction;
  * @author dream
  */
 public class ProductoDAO {
-
-    public List<Producto> listarProductos() {
-        List<Producto> productos = null;
-        Session sesion = HibernateUtil.getSessionFactory().openSession();
-        try {
-            String hql = "from Producto order by id_punto_venta";
-            Query q = sesion.createQuery(hql);
-            
-            productos = q.list();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            sesion.close();
-        }
-        return productos;
-    }
-    
-    public List<Producto> listarProductoIdTienda(int idPuntoVenta, int idFiltro) { //Devuelve todos los productos de una tienda, buscandolos por ID del punto de venta
+    //Devuelve todos los productos de una tienda, buscandolos por ID del punto de venta
+    public List<Producto> listarProductoIdTienda(int idPuntoVenta, int idFiltro) { 
         List<Producto> listadoProductos = null; 
         String hql;
         Session sesion = HibernateUtil.getSessionFactory().openSession(); 
@@ -61,8 +45,10 @@ public class ProductoDAO {
             q = sesion.createQuery(hql); 
             categorias = q.list(); 
             
+            //A cada producto retornado se le asigna su categoría.
+            //Se le resta uno porque los id de la bd empiezan en 1, pero los indices de la lista categorias empiezan en 0.
             for(Producto p : listadoProductos){ 
-                p.setCategoria(categorias.get(p.getCategoria().getIdCategoria())); 
+                p.setCategoria(categorias.get(p.getCategoria().getIdCategoria()-1)); 
             }
             
         } catch (Exception e) {
@@ -73,7 +59,7 @@ public class ProductoDAO {
         return listadoProductos;
     }
     
-    
+    //A partir del id del producto, busca y devuelve un solo objeto Producto correspondiente con ese ID de producto:
     public Producto buscarProducto(int id) {
         Producto producto = new Producto();
         Session sesion = HibernateUtil.getSessionFactory().openSession();
@@ -122,19 +108,23 @@ public class ProductoDAO {
         return id;
     }
 
-    public void modificar(Producto p) {
+    public int modificar(Producto p) { //Metodo para actualizar (Update) un producto.
         Session sesion = HibernateUtil.getSessionFactory().openSession();
+        //Si llega al commit y sigue sin caerse, el resultado cambia a 1. Si al final de esto sigue siendo 0, se supone que falló.
+        int resultado = 0; 
         try {
             Transaction tx = sesion.beginTransaction();
             sesion.update(p);
             tx.commit();
+            resultado = 1;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {
             sesion.close();
         }
+        return resultado;
     }
-    
+    //Devuelve todas las categorías de productos que coinciden con los productos del punto de venta especificado por el id
     public List<Categoria> listarCategoriasPunto(int idPuntoVenta){
         List<Categoria> categorias = null;
         Session sesion = HibernateUtil.getSessionFactory().openSession();

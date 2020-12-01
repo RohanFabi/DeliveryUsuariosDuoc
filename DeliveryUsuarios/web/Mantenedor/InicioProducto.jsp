@@ -36,7 +36,7 @@
                         <br>
                     </div>
                     <form method="POST" enctype="multipart/form-data" name="guardarProducto" action="Producto">
-                        <table align="center" >
+                        <table align="center" > <!--Esta tabla abarca los campos de creación y modificación de productos-->
                             <tr>
                                 <th><label for="nombre">Nombre</label></th>
                                 <th><input type="text" id="nombre" name="nombre" value="${productoMod.nombre}" required></th>

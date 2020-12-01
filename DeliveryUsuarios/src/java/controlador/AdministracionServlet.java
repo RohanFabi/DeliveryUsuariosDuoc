@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import modelo.DetallePedido;
 import modelo.Estado;
 import modelo.MetodoPago;
@@ -64,6 +65,8 @@ public class AdministracionServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        //Si al acceder por url, no se tiene tipo de usuario de punto de venta, no se deja pasar y se envia al indice.
+        comprobarAcceso(request.getSession(),request,response); 
         //busco el id de la tienda en sesion
         Usuario u = (Usuario) request.getSession().getAttribute("login");
         int idTienda = u.getPuntoVenta().getIdPuntoVenta();
@@ -185,21 +188,48 @@ public class AdministracionServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        //rescato el id
-        int idPedido = Integer.parseInt(request.getParameter("lp.idPedido"));
-        //instancio un pedido
-        Pedido pedido = new Pedido();
-        //busco la lista de pedidos de la sesion
-        List<Pedido> listaPedidos = (List<Pedido>) request.getSession().getAttribute("listaPedidos");
-        //recorro la lista para asignar el pedido buscado
-        for (Pedido pedidoLista : listaPedidos) {
-            if (pedidoLista.getIdPedido() == idPedido) {
-                pedido = pedidoLista;
+        //si existe el parametro de estado seleccionado
+        if (request.getParameter("estadoSeleccionado") == null) {
+            //QUIERO VER EL DETALLE DEL PEDIDO
+            //rescato el id
+            int idPedido = Integer.parseInt(request.getParameter("lp.idPedido"));
+            //instancio un pedido
+            Pedido pedido = new Pedido();
+            //busco la lista de pedidos de la sesion
+            List<Pedido> listaPedidos = (List<Pedido>) request.getSession().getAttribute("listaPedidos");
+            //recorro la lista para asignar el pedido buscado
+            for (Pedido pedidoLista : listaPedidos) {
+                if (pedidoLista.getIdPedido() == idPedido) {
+                    pedido = pedidoLista;
+                }
             }
+            //lo guardo en la session
+            request.getSession().setAttribute("pedidoBuscado", pedido);
+            //remuevo el estado confirmado de la lista de sesion
+            List<Estado> listaEstados = (List<Estado>) request.getSession().getAttribute("estados");
+            listaEstados.removeIf(estado -> estado.getDescripcion().equals("entrega confirmada"));
+            request.getSession().setAttribute("estados", listaEstados);
+        } else {
+            //QUIERO CAMBIAR EL ESTADO
+            //busco el id del parametro
+            int idEstado = Integer.parseInt(request.getParameter("estadoSeleccionado"));
+            //busco la lista de estados en la sesion
+            List<Estado> listaEstados = (List<Estado>) request.getSession().getAttribute("estados");
+            Estado e = new Estado();
+            //buscar el estado que coincida
+            for (Estado estado : listaEstados) {
+                if (estado.getIdEstado() == idEstado) {
+                    e = estado;
+                }
+            }
+            //busco el pedido que estamos viendo
+            Pedido p = (Pedido) request.getSession().getAttribute("pedidoBuscado");
+            //le seteo el estado al pedido
+            p.setEstado(e);
+            //guardo el pedido con el nuevo estado
+            PedidoDAO pedidoDao = new PedidoDAO();
+            pedidoDao.modificarPedido(p);
         }
-        //lo guardo en la session
-        request.getSession().setAttribute("pedidoBuscado", pedido);
-
         //redireciona a pagina
         request.getRequestDispatcher("Mantenedor/DetallePedido.jsp").forward(request, response);
     }
@@ -213,5 +243,21 @@ public class AdministracionServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+        private void comprobarAcceso(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Si al acceder por url a gestionar productos, el usuario no es punto de venta, se le debe redirigir al indice.
+        Usuario u = (Usuario) session.getAttribute("login");
+        int id = 0; //Inicialización de la variable a un valor por defecto.
+        //Que intente acceder al metodo getIdTipoUsuario() de la clase TipoUsuario, para asignar el resultado a id. 
+        //Si falla, que rediriga al indice.
+        try {
+            id = u.getTipoUsuario().getIdTipoUsuario();
+        } catch (Exception e) {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }
+        if (id != 2) { //Si el usuario no es un Punto de Venta, también redirige al indice:
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }
+    }
 
 }

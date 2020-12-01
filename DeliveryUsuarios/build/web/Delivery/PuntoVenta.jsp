@@ -39,6 +39,7 @@
                             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
                                     aria-haspopup="true" aria-expanded="false">Categorias</button>
                             <div class="dropdown-menu animated--fade-in-up">
+                                 <a class="dropdown-item" href="PuntoVenta?pv=${puntoventa.nombre}">Todos</a>
                                 <c:forEach items="${categorias}" var="c">
                                     <a class="dropdown-item" href="PuntoVenta?pv=${puntoventa.nombre}-${c.descripcion}">${c.descripcion}</a>
                                 </c:forEach>
@@ -75,9 +76,7 @@
                                                         <button  class="btn btn-light btn-block" 
                                                                  <c:if test="${esOtroPunto==0}">type="submit"</c:if>
                                                                  <c:if test="${esOtroPunto==1}">type="button" onclick="confirmarCambioCarrito()"</c:if>
-                                                                 <c:if test="${login==null || login.tipoUsuario.idTipoUsuario ==3}">disabled</c:if>>
-                                                            Agregar
-                                                        </button>
+                                                                 <c:if test="${login==null || login.tipoUsuario.idTipoUsuario == 2}">disabled</c:if>>Agregar</button>
                                                         <input type="hidden" name="idProducto" id="idProducto" value="${p.idProducto}"/>
                                                     </form>
                                                 </div>

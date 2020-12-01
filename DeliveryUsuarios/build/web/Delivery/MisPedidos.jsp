@@ -23,9 +23,10 @@
     </head>
     <body>
         <div id="layoutDefault">
-            <jsp:include page="../WEB-INF/jspf/header.jsp" />
             <div id="layoutDefault_content" class="col-12">
                 <main>
+                    <jsp:include page="../WEB-INF/jspf/header.jsp" />
+                    <br><br><br>
                     <!--TABLA DE PEDIDOS-->
                     <div class="col-lg-12 col-xl-12 center-block">
                         <div class="table-responsive">
@@ -59,8 +60,8 @@
                                             <td>
                                                 <!--Aqui el test debe cambiar de acuerdo al registro de estado q tengan en bd-->
                                                 <form method="POST" action="MisPedidos">
-                                                    <input type="submit" class="btn btn-info" name="btnConfirmacion" value="Confirmar entrega"/>
-                                                    <input type="hidden" name="idPedidoConfirmado" value="${pedidoBuscado.idPedido}" <c:if test="${pedidoBuscado.estado.idEstado!=5}">disabled</c:if>/>
+                                                    <input type="submit" class="btn btn-info" name="btnConfirmacion" value="Confirmar entrega" <c:if test="${pedidoBuscado.estado.idEstado!=5}">disabled</c:if>/>
+                                                    <input type="hidden" name="idPedidoConfirmado" value="${pedidoBuscado.idPedido}"/>
                                                 </form>
                                             </td>
                                             </tr>

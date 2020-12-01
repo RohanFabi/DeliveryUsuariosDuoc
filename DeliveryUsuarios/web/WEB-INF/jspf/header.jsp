@@ -75,9 +75,7 @@
                                     <div class="dropdown-menu dropdown-menu-right animated--fade-in-up"
                                          aria-labelledby="navbarDropdownDocs">
                                         <!-- AYUDA 1 -->
-                                        <a class="dropdown-item py-3"
-                                           href="https://docs.startbootstrap.com/sb-ui-kit-pro/quickstart"
-                                           target="_blank">
+                                        <a class="dropdown-item py-3">
                                             <div class="icon-stack bg-primary-soft text-primary mr-4">
                                                 <i class="fas fa-book-open"></i>
                                             </div>
@@ -88,9 +86,7 @@
                                         </a>
                                         <div class="dropdown-divider m-0"></div>
                                         <!-- AYUDA 2 -->
-                                        <a class="dropdown-item py-3"
-                                           href="https://docs.startbootstrap.com/sb-ui-kit-pro/components"
-                                           target="_blank">
+                                        <a class="dropdown-item py-3">
                                             <div class="icon-stack bg-primary-soft text-primary mr-4"><i
                                                     class="fas fa-code"></i></div>
                                             <div>
@@ -100,9 +96,7 @@
                                         </a>
                                         <div class="dropdown-divider m-0"></div>
                                         <!-- AYUDA 3 -->
-                                        <a class="dropdown-item py-3"
-                                           href="https://docs.startbootstrap.com/sb-ui-kit-pro/changelog"
-                                           target="_blank">
+                                        <a class="dropdown-item py-3">
                                             <div class="icon-stack bg-primary-soft text-primary mr-4"><i
                                                     class="fas fa-file"></i></div>
                                             <div>
@@ -112,6 +106,8 @@
                                             </div>
                                         </a>
                                     </div>
+                                </li>
+                                <li class="nav-item"><a class="nav-link" href="MisPedidos">Mis Pedidos </a>
                                 </li>
                                 <!-- USUARIO -->
                                 <li class="nav-item dropdown no-caret  dropdown-user">

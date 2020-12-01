@@ -1,13 +1,10 @@
 package controlador;
 
 import DAO.ProductoDAO;
-import DAO.UsuarioDAO;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -123,6 +120,7 @@ public class ProductoServlet extends HttpServlet {
         request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
     }
 
+    //PARA QUE GUARDAR Y MODIFICAR PRODUCTOS MODIFIQUEN E INGRESEN EN LA BASE DE DATOS, DEBEN TENER UNA DIRECCIÓN VÁLIDA DONDE GUARDAR LAS IMÁGENES.
     private void guardarProducto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //Se guardan los atributos de la sesión temporalmente como objetos.
         HttpSession session = request.getSession();
@@ -146,8 +144,7 @@ public class ProductoServlet extends HttpServlet {
         //lo transforma en una cadena de datos
         InputStream is = archivo.getInputStream();
         //crea un archivo en la locacion indicada
-//        File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/img/producto/" + imagen);
-        File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/img/producto/" + imagen);
+        File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/web/img/producto/" + imagen);
         //lee los datos y los guarda en el archivo
         FileOutputStream ous = new FileOutputStream(f);
         int dato = is.read();
@@ -162,9 +159,9 @@ public class ProductoServlet extends HttpServlet {
         cat.setIdCategoria(categoria);
         //hago un punto de venta y le seteo el id a partir del idPuntoVenta presente en el usuario respaldado.
         PuntoVenta punto = respUser.getPuntoVenta();
-        //id del producto = guardar producto en la bd
-        int id = objP.guardar(new Producto(cat, punto, nombre, precio, imagen, true));
-
+        //id del producto = id del mismo en la BD
+        int id = objP.guardar(new Producto(cat, punto, nombre, precio, imagen, true)); 
+        
         actualizarListadoProductos(request, response,idFiltro);
     }
 
@@ -195,9 +192,8 @@ public class ProductoServlet extends HttpServlet {
             Part archivo = request.getPart("imagen");
             //lo transforma en una cadena de datos
             InputStream is = archivo.getInputStream();
-            //crea un archivo en la locacion indicada
-            File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/img/producto/" + imagen);
-            //File f = new File("C:/Users/dream/Documents/proyecto delivery iVaras/DeliveryFS/Delivery v02/DeliveryUsuarios/img/producto/" + imagen);
+            //crea un archivo en la locacion indicada. 
+            File f = new File("C:/Users/DiegoM/Desktop/DeliveryUsuariosDuoc/DeliveryUsuarios/web/img/producto/" + imagen);
             //lee los datos y los guarda en el archivo
             FileOutputStream ous = new FileOutputStream(f);
             int dato = is.read();
@@ -217,12 +213,9 @@ public class ProductoServlet extends HttpServlet {
         //instancio un producto con los datos
         Producto producto = new Producto(cat, punto, nombre, precio, imagen, true);
         producto.setIdProducto(idProducto);
-        //modificar producto
-        objP.modificar(producto);
-        //guardo elproducto para verlo con los nuevos datos
-        session.setAttribute("productoMod", producto);
+        //modificar producto, el resultado podría usarse para mostrar un mensaje de exito o de error dependiendo de si es mayor a cero o no. 
+        int resultado = objP.modificar(producto);
         //redirecciono a la pagina
-        //request.getRequestDispatcher("Mantenedor/ModificarProducto.jsp").forward(request, response);
         response.sendRedirect("Producto");
     }
 
@@ -273,7 +266,7 @@ public class ProductoServlet extends HttpServlet {
         //Este atributo contiene el listado de productos recuperado, se usa en InicioProducto.jsp para llenar la tabla. 
         session.setAttribute("productos", productos); 
         //Se recarga la página para actualizar la tabla:
-            request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
+        request.getRequestDispatcher("Mantenedor/InicioProducto.jsp").forward(request, response);
     }
 
 }
