@@ -50,17 +50,20 @@ Contributor(s):
     <property name="hibernate.current_session_context_class">managed</property>
     <property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.CharSet">utf8</property>
+    <property name="hibernate.connection.characterEncoding">utf8</property>
+    <property name="hibernate.connection.useUnicode">true</property>
+    <mapping resource="modelo/Usuario.hbm.xml"/>
+    <mapping resource="modelo/Estado.hbm.xml"/>
+    <mapping resource="modelo/Producto.hbm.xml"/>
+    <mapping resource="modelo/Categoria.hbm.xml"/>
+    <mapping resource="modelo/Pedido.hbm.xml"/>
+    <mapping resource="modelo/Ubicacion.hbm.xml"/>
     <mapping resource="modelo/TipoUsuario.hbm.xml"/>
     <mapping resource="modelo/TipoEntrega.hbm.xml"/>
-    <mapping resource="modelo/Pedido.hbm.xml"/>
-    <mapping resource="modelo/Sede.hbm.xml"/>
-    <mapping resource="modelo/Ubicacion.hbm.xml"/>
-    <mapping resource="modelo/Categoria.hbm.xml"/>
-    <mapping resource="modelo/DetallePedido.hbm.xml"/>
-    <mapping resource="modelo/Usuario.hbm.xml"/>
-    <mapping resource="modelo/Producto.hbm.xml"/>
     <mapping resource="modelo/PuntoVenta.hbm.xml"/>
-    <mapping resource="modelo/Estado.hbm.xml"/>
     <mapping resource="modelo/MetodoPago.hbm.xml"/>
+    <mapping resource="modelo/Sede.hbm.xml"/>
+    <mapping resource="modelo/DetallePedido.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

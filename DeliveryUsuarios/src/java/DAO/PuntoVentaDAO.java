@@ -6,8 +6,6 @@
 package DAO;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modelo.PuntoVenta;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -34,12 +32,12 @@ public class PuntoVentaDAO {
         }
         return puntos;
     }
-    
-    public PuntoVenta buscar(int id) {
+        
+    public PuntoVenta buscarById(int id) {
         PuntoVenta punto = new PuntoVenta();
         Session sesion = HibernateUtil.getSessionFactory().openSession();
         try {
-            String hql = "from Punto p where p.idPuntoVenta= :id";            
+            String hql = "from PuntoVenta p where p.idPuntoVenta= :id";            
             Query q = sesion.createQuery(hql);
             q.setParameter("id", id);
             
@@ -50,6 +48,41 @@ public class PuntoVentaDAO {
             sesion.close();
         }
         return punto;
+    }
+    
+    public PuntoVenta buscarNombreSede(String nombre, int idSede){
+        PuntoVenta punto = new PuntoVenta();
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "from PuntoVenta p where p.nombre= :nombre and p.sede.idSede= :idSede";            
+            Query q = sesion.createQuery(hql);
+            q.setParameter("nombre", nombre);
+            q.setParameter("idSede", idSede);
+            
+            punto = (PuntoVenta) q.uniqueResult();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return punto;
+    }
+    
+    public List<PuntoVenta> listarPuntosSede(int idSede) {
+        List<PuntoVenta> puntos = null;
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        try {
+            String hql = "from PuntoVenta where p.sede.idSede= :idSede";
+            Query q = sesion.createQuery(hql);
+            q.setParameter("idSede", idSede);
+            
+            puntos = q.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            sesion.close();
+        }
+        return puntos;
     }
     
 }

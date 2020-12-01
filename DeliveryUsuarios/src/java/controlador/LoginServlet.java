@@ -5,6 +5,8 @@
  */
 package controlador;
 
+import DAO.PuntoVentaDAO;
+import DAO.UsuarioDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,6 +14,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import modelo.PuntoVenta;
 import modelo.Usuario;
 
 /**
@@ -21,70 +25,71 @@ import modelo.Usuario;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/Login"})
 public class LoginServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");        
+        response.setContentType("text/html;charset=UTF-8");
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        //limpio los mensajes
+        request.getSession().removeAttribute("msjerror");
+        //busco la info del login
+        Usuario u = (Usuario) request.getSession().getAttribute("login");
+        //Si un usuario logeado accede a esta página, es porque entro presionando el botón "Salir"
+        //entonces se limpia la sesion, quitando el usuario y el tipo de usuario, y se le redirecciona
+        if (u != null) {
+            request.getSession().invalidate();
+            response.sendRedirect("index");
+        } else {
+            //redirecciono
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        //esto es de un carrito y aqui no aplica pero lo deje para usarlo despues
+        //busco los datos
+        String email = request.getParameter("email");
+        String contrasena = request.getParameter("contrasena");
         //busco si hay un login activo
-        Usuario usuario=(Usuario) request.getSession().getAttribute("login");
-        //si no hay un login
-        if (usuario == null) {
-            //instacio un usuario
-            usuario= new Usuario();
-            //creo login
-            request.getSession().setAttribute("login", request);
-        }
-        
-        //retornar usuario y derivar a pagina
-        
-    }
+        UsuarioDAO udao = new UsuarioDAO();
+        Usuario usuario = udao.buscarUsuarioLogin(email, contrasena);
+        if (usuario != null) { //si te devolvio algun usuario
+            //si el usuario esta activo
+            if (usuario.isActivo()) { //Si la cuenta de usuario está activa, ya que estas podrían desactivarse.
+                //Al usuario que se almacenará luego como atributo de sesión se le quita la contraseña, por si acaso.
+                usuario.setContrasena("null"); 
+                if (usuario.getTipoUsuario().getIdTipoUsuario() == 2) { //Punto de venta
+                    int idPuntoVenta = usuario.getPuntoVenta().getIdPuntoVenta();
+                    PuntoVentaDAO pvDAO = new PuntoVentaDAO();
+                    usuario.setPuntoVenta(pvDAO.buscarById(idPuntoVenta));
+                    
+                    request.getSession().setAttribute("login", usuario); 
+//Redirige al listado de pedidos, de momento esa página y su servlet se llaman Administracion, pero podría llamarse 
+//ListadoPedidos o algo más descriptivo
+                    response.sendRedirect("Administracion"); 
+                } else if (usuario.getTipoUsuario().getIdTipoUsuario() == 3) { //Colaborador o Cliente
+                    request.getSession().setAttribute("login", usuario);
+                    response.sendRedirect("index");
+                } else {
+                    request.getSession().setAttribute("msjerror", "Dirijase a modulo de administracion");
+                    //redirecciono para q no borre el mensaje
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                }
+            }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        } else {
+            //guardo el mensaje que se mostrará al redirigir, como contenido de un div en login.jsp
+            request.getSession().setAttribute("msjerror", "Email o contraseña incorrectas, si olvido su contraseña comuniquese con un administrador");
+            //redirecciono para q no borre el mensaje
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
+    }
 
 }

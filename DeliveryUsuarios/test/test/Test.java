@@ -5,10 +5,17 @@
  */
 package test;
 
+import DAO.PedidoDAO;
 import DAO.ProductoDAO;
+import DAO.PuntoVentaDAO;
+import DAO.UsuarioDAO;
 import java.util.Iterator;
 import java.util.List;
+import modelo.Categoria;
+import modelo.DetallePedido;
+import modelo.Pedido;
 import modelo.Producto;
+import modelo.PuntoVenta;
 
 /**
  *
@@ -20,15 +27,10 @@ public class Test {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ProductoDAO pd = new ProductoDAO();
-        Producto p = pd.buscarProducto(3);
 
-        System.out.println("producto "+p.getNombre());
         
-        p.setNombre("jugo 200cc");
-        pd.modificar(p);
-        p = pd.buscarProducto(3);
-        System.out.println("producto "+p.getNombre());
+        
+        
 
     }
 
