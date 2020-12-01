@@ -41,11 +41,11 @@
                                         <form method="POST" action="Login" name="login">
                                             <div class="form-group">
                                                 <label class="small mb-1" for="email">Email</label>
-                                                <input class="form-control py-4" id="email" name="email" type="email" placeholder="user@example.com" value="doggis@doggis.cl"/>
+                                                <input class="form-control py-4" id="email" name="email" type="email" placeholder="user@example.com" value=""/>
                                             </div>
                                             <div class="form-group">
                                                 <label class="small mb-1" for="contrasena">Password</label>
-                                                <input class="form-control py-4" id="contrasena" name="contrasena" type="password" placeholder="Ingrese password" value="doggis"/>
+                                                <input class="form-control py-4" id="contrasena" name="contrasena" type="password" placeholder="Ingrese password" value=""/>
                                             </div>
                                             <div
                                                 class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
